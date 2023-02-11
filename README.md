@@ -1,15 +1,15 @@
 
-# @fureli/react-controller
+# @gapu/react-controller
 
 A small, fast and no-boilerplate state-management library for react, using hooks.
 
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/@furel/react-controller?style=flat-square)
-![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square) ![npm (scoped)](https://img.shields.io/npm/v/@furel/react-controller?color=blue&style=flat-square)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/react-controller?style=flat-square)
+![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square) ![npm (scoped)](https://img.shields.io/npm/v/@gapu/react-controller?color=blue&style=flat-square)
 
 ## Installation
 
 ```shell
-npm install @furel/react-controller
+npm install @gapu/react-controller
 ```
 
 ## Description
@@ -22,7 +22,7 @@ When working with a nested state, unlike other state management libraries, you a
 ```tsx
 // Counter.tsx
 
-import { create } from '@furel/react-controller'
+import { create } from '@gapu/react-controller'
 
 const useCounter = create({
     a: {
