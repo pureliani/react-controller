@@ -13,7 +13,7 @@ npm install @gapu/react-controller
 ```
 
 ## Description
-react-controller is a state-management library which is aimed at making the nested state managemenet easier.
+react-controller is a state-management library which is aimed at making nested state managemenet easier.
 
 ## Usage
 
@@ -35,7 +35,7 @@ const useCounter = create({
 // useCounter takes a selector as an argument which will subscribe the component
 // to changes on that specific field. Now, the "Counter" component will only rerender 
 // when the state.a.b changes. Changing state.a.c or state.d will not trigger a
-// rerender for of component.
+// rerender of this component.
 export const Counter = () => {
     const { value, setValue } = useCounter(state => state.a.b)
 
