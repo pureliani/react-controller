@@ -1,3 +1,5 @@
+import { deepCopy } from "./deepCopy";
+
 type TObject = { [key: string | symbol | number]: any };
 
 type Path = (string | symbol | number)[];
@@ -14,10 +16,10 @@ type GetPathFromKey = <TTarget extends { ref: TObject }>(
 ) => Path;
 
 export const getPathFromKey: GetPathFromKey = ({ target, key }) => {
-    const clone = JSON.parse(JSON.stringify(target));
+    const clone = deepCopy(target);
     const path: Path = [];
     const isProxy = Symbol('isProxy');
-    const handler: ProxyHandler<typeof clone> = {
+    const handler: ProxyHandler<TObject> = {
         get(t, p) {
             if (p === isProxy) return true;
             path.push(p);

@@ -1,3 +1,5 @@
+import { deepCopy } from "./deepCopy";
+
 type TObject = { [key: string | symbol | number]: any };
 
 type SetNestedValueArgs<TTarget extends TObject> = {
@@ -15,7 +17,7 @@ type SetNestedValue = <TTarget extends TObject>(args: SetNestedValueArgs<TTarget
  * @returns Deep clone of the target object via 'JSON.parse(JSON.stringify())'
  */
 export const setNestedValue: SetNestedValue = ({ target, path, value }) => {
-    var clone = JSON.parse(JSON.stringify(target));
+    var clone = deepCopy(target);
     let movingReference: TObject = clone
     let movingKey: string | symbol | number = path[0]
     if (movingKey !== 0 && !movingKey) throw new Error('setNestedValue: path cannot be empty')
