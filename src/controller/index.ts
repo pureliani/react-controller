@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "use-sync-external-store"
+import { useSyncExternalStore } from "use-sync-external-store/shim"
 import { getPathFromKey } from "../helpers/getPathFromKey"
 import { setNestedValue } from "../helpers/setNestedValue"
 
