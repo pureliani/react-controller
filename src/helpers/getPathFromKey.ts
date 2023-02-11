@@ -14,7 +14,7 @@ type GetPathFromKey = <TTarget extends { ref: TObject }>(
 ) => Path;
 
 export const getPathFromKey: GetPathFromKey = ({ target, key }) => {
-    const clone = structuredClone(target);
+    const clone = JSON.parse(JSON.stringify(target));
     const path: Path = [];
     const isProxy = Symbol('isProxy');
     const handler: ProxyHandler<typeof clone> = {
