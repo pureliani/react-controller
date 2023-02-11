@@ -3,6 +3,8 @@ import commongjs from "@rollup/plugin-commonjs"
 import typescript from "@rollup/plugin-typescript"
 import dts from "rollup-plugin-dts"
 import strip from '@rollup/plugin-strip';
+import terser from '@rollup/plugin-terser';
+import bundleSize from 'rollup-plugin-bundle-size';
 import packageJSON from './package.json' assert { type: "json" }
 
 
@@ -25,7 +27,9 @@ export default [
             resolve(),
             commongjs(),
             typescript({ tsconfig: "./tsconfig.json" }),
-            strip()
+            strip(),
+            terser(),
+            bundleSize()
         ],
         external: ['react', 'react-dom']
     }, 
