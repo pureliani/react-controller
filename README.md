@@ -3,8 +3,8 @@
 
 A small, fast and no-boilerplate state-management library for react, using hooks.
 
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/react-controller?style=flat-square)
-![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square) ![npm (scoped)](https://img.shields.io/npm/v/@gapu/react-controller?color=blue&style=flat-square)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/react-controller?style=flat-square)](https://bundlephobia.com/package/@gapu/react-controller@latest)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://github.com/pureliani/react-controller/blob/main/LICENSE) [![npm (scoped)](https://img.shields.io/npm/v/@gapu/react-controller?color=blue&style=flat-square)](https://www.npmjs.com/package/@gapu/react-controller)
 
 ## Installation
 
