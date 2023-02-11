@@ -26,7 +26,7 @@
   "author": "Gabriel Pureliani",
   "license": "MIT",
   "publishConfig": {
-    "@gapu:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "24.0.1",
