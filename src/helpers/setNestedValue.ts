@@ -15,11 +15,18 @@ type SetNestedValue = <TTarget extends TObject>(args: SetNestedValueArgs<TTarget
  * @returns Deep clone of the target object via 'structuredClone'
  */
 export const setNestedValue: SetNestedValue = ({ target, path, value }) => {
-    const [head, ...rest] = path
-    return {
-        ...target,
-        [head]: rest.length
-            ? setNestedValue({ target: target[head], path: rest, value })
-            : value
-    }
+    var clone = structuredClone(target);
+    let movingReference: TObject = clone
+    let movingKey: string | symbol | number = path[0]
+    if (movingKey !== 0 && !movingKey) throw new Error('setNestedValue: path cannot be empty')
+    path.forEach(p => {
+        if (typeof movingReference[p] === 'object') {
+            movingReference = movingReference[p]
+            movingKey = p
+        } else {
+            movingKey = p
+        }
+    })
+    movingReference[movingKey] = value
+    return clone
 }
