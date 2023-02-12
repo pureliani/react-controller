@@ -37,7 +37,6 @@ export const create = <State extends TObject>(initialState: State) => {
             }
             const nextState = setNestedValue({ state, path, value: nextValue })
             state = nextState
-            console.log('state was 1123')
             notifyListeners()
         }, [])
 
