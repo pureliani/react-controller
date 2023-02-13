@@ -22,6 +22,9 @@
   },
   "keywords": [
     "state manager",
+    "redux",
+    "jotai",
+    "zustand",
     "react"
   ],
   "author": "Gabriel Pureliani",

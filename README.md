@@ -61,10 +61,10 @@ const { useSelector } = create({
     d: 2
 })
 
-// useSelector takes a selector function as an argument which will subscribe the component
-// to changes on that specific field. Now, the "Counter" component will only rerender 
-// when the state.a.b changes. Changing state.a.c or state.d will not trigger a
-// rerender of this component.
+// useSelector takes a selector function as an argument which will subscribe the
+//  component to changes on that specific field. Now, the "Counter" component
+//  will only rerender when the state.a.b changes. Changing state.a.c or state.d
+//  will not trigger a rerender of this component.
 export const Counter = () => {
     const { value, setValue } = useSelector(state => state.a.b)
     return (
@@ -84,7 +84,8 @@ import { create } from '@gapu/react-controller'
 
 const { getState, useSelector } = create({ count: 1 })
 
-// you can get the current state of your store by calling the 'getState' function.
+// you can get the current state of your store 
+// by calling the 'getState' function.
 const currentState = getState()
 
 console.log(currentState) // { count: 1 }
@@ -108,7 +109,8 @@ import { create } from '@gapu/react-controller'
 
 const { setState, getState, useSelector } = create({ count: 1 })
 
-// you can also set the current state of your store by calling the 'setState' function.
+// you can also set the current state of your store 
+// by calling the 'setState' function.
 setState({ count: 42 })
 console.log(getState()) // { count: 42 }
 
@@ -158,9 +160,10 @@ Currently we have only two plugins: persist and broadcast.
 ```tsx
 import { create, persist } from '@gapu/react-controller'
 
-// This state will be persisted in localStorage on the key 'localStorageKeyName'.
-// before using this middleware make sure the data is serializable (is a valid JSON),
-// otherwise data might be lost during internal stringification.
+// This state will be persisted in localStorage on the key 'localStorageKeyName'
+// before using this middleware make sure the data is serializable 
+// (is a valid JSON), otherwise data might be lost during internal 
+// stringification.
 const { useSelector } = create({
     a: 1,
     b: {
@@ -184,9 +187,10 @@ export const Counter = () => {
 ```tsx
 import { create, broadcast } from '@gapu/react-controller'
 
-// This state will be shared between browser tabs via BroadcastChannels on the 'broadcastChannelName' channel.
-// Please make sure your state can be cloned via the 'structuredClone' function
-// otherwise data might be lost / application might crash.
+// This state will be shared between browser tabs via BroadcastChannels on the
+// 'broadcastChannelName' channel. please make sure your state can be cloned 
+// via the 'structuredClone' function. otherwise data might be lost /
+// application might crash.
 const { useSelector } = create({
     a: 1,
     b: {
@@ -211,9 +215,11 @@ export const Counter = () => {
 ```tsx
 import { create, persist, broadcast } from '@gapu/react-controller'
 
-// This state will be shared between browser tabs via BroadcastChannels on the 'broadcastChannelName' channel
-// Data will also persisted in localStorage on the key 'localStorageKeyName'
-// Please make sure your data can be deeply cloned via the 'structuredClone' and is also serializable (is a valid JSON)
+// This state will be shared between browser tabs via BroadcastChannels on the
+// 'broadcastChannelName' channel, data will also persisted in localStorage on
+// the key 'localStorageKeyName', please make sure your data can be
+// deeply cloned via the 'structuredClone' and is also serializable
+// (is a valid JSON)
 const { useSelector } = create({
     a: 1,
     b: {
