@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
-import { cloneFunction } from '../helpers/cloneFunction'
 import { selectorToPath } from "../helpers/selectorToPath"
 import { setNestedValue } from "../helpers/setNestedValue"
 

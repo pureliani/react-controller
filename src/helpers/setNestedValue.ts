@@ -17,7 +17,9 @@ type SetNestedValue = <TTarget extends TObject>(args: SetNestedValueArgs<TTarget
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
     let movingReference: TObject = state
     let movingKey: string | symbol | number = path[0]
-    if (movingKey !== 0 && !movingKey) throw new Error('setNestedValue: path cannot be empty')
+    if (movingKey !== 0 && !movingKey) {
+        return Object.assign({}, state, value)
+    }
     path.forEach(p => {
         if (typeof movingReference[p] === 'object') {
             movingReference = movingReference[p]
