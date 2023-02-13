@@ -1,12 +1,16 @@
 
 # @gapu/react-controller
 
+
 A small, fast and no-boilerplate state-management library for react, using hooks.
 
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/react-controller?style=flat-square)](https://bundlephobia.com/package/@gapu/react-controller@latest)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://github.com/pureliani/react-controller/blob/main/LICENSE) [![npm (scoped)](https://img.shields.io/npm/v/@gapu/react-controller?color=blue&style=flat-square)](https://www.npmjs.com/package/@gapu/react-controller)
 
-## Installation
+## Installation ⚡
+
+> **Warning**  
+> react-controller only supports react version >= 16.8.0
 
 ```shell
 npm install @gapu/react-controller
@@ -15,10 +19,21 @@ npm install @gapu/react-controller
 ## Description
 react-controller is a state-management library which is aimed at making nested state managemenet easier.
 
+> **Note**  
+> **This library is still in development** and i'm planning on adding features such as: Asynchronous state initialization, SSR support, State Synchronization between browser tabs and redux devtools integration.  
+>  
+> Version 1.0.0 will be released only after the planned features are implemented and the remaining bugs are fixed. 
+>  
+> Collaborators are welcome ❤  
+>
+> If you come across an issue please report it on our github issues page: https://github.com/pureliani/react-controller/issues 
+
 ## Usage
 
-When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.
+When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
 
+> **Note**  
+> **Context providers are not needed.**
 ```tsx
 // Counter.tsx
 
