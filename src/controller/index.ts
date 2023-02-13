@@ -36,8 +36,6 @@ export const create = <State extends TObject>(initialState: State, plugins?: Plu
             }
             const nextRootState = setNestedValue({ state: store.getRootState(), path, value: nextValue })
             store.setRootState(nextRootState)
-            store.notifyExternalListeners()
-            store.notifyInternalListeners()
         }, [])
 
         return { value, setValue }
