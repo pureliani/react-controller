@@ -27,13 +27,13 @@ export const createStore = <State extends TObject>(store: State) => {
         } else {
             state = update
         }
-        notifyInternalListeners()
-        notifyExternalListeners()
     }
 
     return {
         setRootState,
         getRootState,
+        notifyInternalListeners,
+        notifyExternalListeners,
         subscribeInternal,
         subscribeExternal,
     }
