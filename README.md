@@ -66,7 +66,7 @@ const { useSelector } = create({
 //  will only rerender when the state.a.b changes. Changing state.a.c or state.d
 //  will not trigger a rerender of this component.
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.a.b)
+    const [value, setValue] = useSelector(state => state.a.b)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -91,7 +91,7 @@ const currentState = getState()
 console.log(currentState) // { count: 1 }
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -115,7 +115,7 @@ setState({ count: 42 })
 console.log(getState()) // { count: 42 }
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -142,7 +142,7 @@ const unsubscribe = subscribe((newState) => {
 })
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -172,7 +172,7 @@ const { useSelector } = create({
 }, [persist('localStorageKeyName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
@@ -199,7 +199,7 @@ const { useSelector } = create({
 }, [broadcast('broadcastChannelName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
@@ -228,7 +228,7 @@ const { useSelector } = create({
 }, [persist('localStorageKeyName'), broadcast('broadcastChannelName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
