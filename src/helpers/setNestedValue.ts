@@ -15,19 +15,15 @@ type SetNestedValue = <TTarget extends TObject>(args: SetNestedValueArgs<TTarget
  * @returns Deep clone of the target object via 'JSON.parse(JSON.stringify())'
  */
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
-    let movingReference: TObject = state
-    let movingKey: string | symbol | number = path[0]
-    if (movingKey !== 0 && !movingKey) {
-        return Object.assign({}, state, value)
+    var schema = structuredClone(state);
+    var len = path.length;
+    if (len === 0) return structuredClone(value)
+    for (var i = 0; i < len - 1; i++) {
+        var elem = path[i];
+        if (!schema[elem]) throw new Error('@gapu/react-controller: setNestedValue - Invalid Path')
+        schema = schema[elem];
     }
-    path.forEach(p => {
-        if (typeof movingReference[p] === 'object') {
-            movingReference = movingReference[p]
-            movingKey = p
-        } else {
-            movingKey = p
-        }
-    })
-    movingReference[movingKey] = value
-    return Object.assign({}, state)
+
+    schema[path[len - 1]] = value;
+    return schema
 }

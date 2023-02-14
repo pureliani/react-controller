@@ -1,9 +1,11 @@
 import { Listener, StateSetter, TObject } from "../controller";
 
 type StateListener<State> = (state: State) => void
+type ListenerType = ('internal' | 'external' | 'channel')
 
 export const createStore = <State extends TObject>(store: State) => {
     let state = store
+    const getState = () => state
     const internalListeners = new Set<Listener>()
     const externalListeners = new Set<StateListener<State>>()
     const channelListeners = new Set<StateListener<State>>()
@@ -13,48 +15,45 @@ export const createStore = <State extends TObject>(store: State) => {
             internalListeners.delete(listener)
         }
     }
+
     const subscribeExternal = (listener: StateListener<State>) => {
         externalListeners.add(listener)
         return () => {
             externalListeners.delete(listener)
         }
     }
+
     const subscribeChannel = (listener: StateListener<State>) => {
         channelListeners.add(listener)
         return () => {
             channelListeners.delete(listener)
         }
     }
-    const getRootState = () => state
 
-    const notifyInternalListeners = () => internalListeners.forEach(listener => listener())
-    const notifyExternalListeners = () => externalListeners.forEach(listener => listener(state))
-    const notifyChannelListeners = () => channelListeners.forEach(listener => listener(state))
-
-    const setRootState: StateSetter<State> = (update) => {
-        if (update instanceof Function) {
-            state = update(state)
-        } else {
-            state = update
+    const notifyListeners = (listeners: ListenerType[]) => {
+        if (listeners.includes('internal')) {
+            internalListeners.forEach(listener => listener())
         }
-        notifyInternalListeners()
-        notifyExternalListeners()
-        notifyChannelListeners()
+        if (listeners.includes('external')) {
+            externalListeners.forEach(listener => listener(getState()))
+        }
+        if (listeners.includes('channel')) {
+            channelListeners.forEach(listener => listener(getState()))
+        }
     }
-    const setRootStateWithoutChannels: StateSetter<State> = (update) => {
+
+    const setState: StateSetter<State> = (update) => {
         if (update instanceof Function) {
             state = update(state)
         } else {
             state = update
         }
-        notifyInternalListeners()
-        notifyExternalListeners()
     }
 
     return {
-        setRootState,
-        setRootStateWithoutChannels,
-        getRootState,
+        setState,
+        getState,
+        notifyListeners,
         subscribeInternal,
         subscribeExternal,
         subscribeChannel

@@ -9,18 +9,19 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 
 ## Navigation
 
-1. [Installation](https://github.com/pureliani/react-controller/edit/main/README.md#installation-)  
-2. [Description](https://github.com/pureliani/react-controller/edit/main/README.md#description)  
-3. [Usage](https://github.com/pureliani/react-controller/edit/main/README.md#usage)  
-   - [Basic](https://github.com/pureliani/react-controller/edit/main/README.md#basic)  
-   - [Getting the state of your store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#getting-the-state-of-your-store-from-outside-of-react)  
-   - [Setting the state of your store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#setting-the-state-of-your-store-from-outside-of-react)  
-   - [Subscribing to changes in a store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#subscribing-to-changes-in-a-store-from-outside-of-react)  
-4. [Plugins](https://github.com/pureliani/react-controller/edit/main/README.md#plugins)  
-   - [Persisting state with the 'persist' plugin](https://github.com/pureliani/react-controller/edit/main/README.md#persisting-state-with-the-persist-plugin)
-   - [Sharing state between browser tabs with the 'broadcast' plugin](https://github.com/pureliani/react-controller/edit/main/README.md#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
-   - [Using both persist and broadcast in conjunction](https://github.com/pureliani/react-controller/edit/main/README.md#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
-5. [Planned Features](https://github.com/pureliani/react-controller/edit/main/README.md#planned-features)
+1. [Installation](#installation-)  
+2. [Description](#description)  
+3. [Usage](#usage)  
+   - [Basic](#basic)  
+   - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
+   - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
+   - [Subscribing to changes in a store from outside of react](#subscribing-to-changes-in-a-store-from-outside-of-react)  
+   - [Server side state initialization ( Next.js )](#server-side-state-initialization--nextjs-)
+4. [Plugins](#plugins)  
+   - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
+   - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
+   - [Using both persist and broadcast in conjunction](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
+5. [Planned Features](#planned-features)
 
 ## Installation ⚡
 
@@ -66,7 +67,7 @@ const { useSelector } = create({
 //  will only rerender when the state.a.b changes. Changing state.a.c or state.d
 //  will not trigger a rerender of this component.
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.a.b)
+    const [value, setValue] = useSelector(state => state.a.b)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -91,7 +92,7 @@ const currentState = getState()
 console.log(currentState) // { count: 1 }
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -115,7 +116,7 @@ setState({ count: 42 })
 console.log(getState()) // { count: 42 }
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -142,7 +143,7 @@ const unsubscribe = subscribe((newState) => {
 })
 
 export const Counter = () => {
-    const { value, setValue } = useSelector(state => state.count)
+    const [value, setValue] = useSelector(state => state.count)
     return (
         <div>
             <h3>Count {value}</h3>
@@ -150,6 +151,54 @@ export const Counter = () => {
             <button onClick={() => setValue(current => current - 1)}>- 1</button>
         </div>
     )
+}
+```
+
+### Server side state initialization ( Next.js )
+
+```tsx
+import { InferGetServerSidePropsType } from 'next'
+import { create } from "@gapu/react-controller";
+
+
+// Create the state like usual and extract 'ServerSideStateProvider' and
+// 'initServerState' fields.
+export const { ServerStateProvider, initServerState, useSelector } = create({
+  count: -57
+})
+
+
+// fetch the initial data for the store.
+export const getServerSideProps = () => {
+  return {
+    props: {
+      initialState: {
+        count: 1_000_000
+      }
+    }
+  }
+}
+
+export default function Home(
+  { initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+  // **IMPORTANT** you should call this function before any 'useSelector'
+  initServerState(initialState)
+
+  // After calling 'initServerState' you can safely call 'useSelector'
+  // functions
+  const [count, setCount] = useSelector(state => state.count) // 1_000_000
+
+  // Sadly we still have to rely on context providers in the case of SSR.
+  return (
+    <ServerStateProvider state={initialState}>
+      <div>
+        <h3>Count is {count}</h3>
+        <button onClick={() => setCount(current => current + 1)}>+ 1</button>
+        <button onClick={() => setCount(current => current - 1)}>- 1</button>
+      </div>
+    </ServerStateProvider>
+  )
 }
 ```
 
@@ -172,7 +221,7 @@ const { useSelector } = create({
 }, [persist('localStorageKeyName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
@@ -199,7 +248,7 @@ const { useSelector } = create({
 }, [broadcast('broadcastChannelName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
@@ -228,7 +277,7 @@ const { useSelector } = create({
 }, [persist('localStorageKeyName'), broadcast('broadcastChannelName')])
 
 export const Counter = () => {
-    const { value, setValue } = useSelector((state) => state.a)
+    const [value, setValue] = useSelector((state) => state.a)
     return (
         <div>
             <h3>Count: {value}</h3>
