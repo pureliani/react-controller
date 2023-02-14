@@ -1,17 +1,17 @@
 {
-  "name": "@gapu/react-controller",
+  "name": "@gapu/deepstate",
   "version": "0.3.2",
   "description": "A small state manager for react.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pureliani/react-controller.git"
+    "url": "git+https://github.com/pureliani/deepstate.git"
   },
   "bugs": {
-    "url": "https://github.com/pureliani/react-controller/issues"
+    "url": "https://github.com/pureliani/deepstate/issues"
   },
-  "homepage": "https://github.com/pureliani/react-controller#readme",
+  "homepage": "https://github.com/pureliani/deepstate#readme",
   "files": [
     "dist"
   ],
