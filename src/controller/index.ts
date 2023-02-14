@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
 import { createStore } from '../helpers/createStore'
+import { createServerStateProvider } from '../helpers/createWithServerState'
 import { selectorToPath } from "../helpers/selectorToPath"
 import { setNestedValue } from "../helpers/setNestedValue"
 import { persist } from '../plugins/persist'
@@ -17,14 +18,25 @@ type UseHook<State> = <TSelected>(key: (state: State) => TSelected) => [TSelecte
 
 export const create = <State extends TObject>(initialState: State, plugins?: Plugins) => {
     const store = createStore(initialState)
+    const { ServerStateProvider, useServerStateProvider } = createServerStateProvider<State>()
 
     plugins?.forEach(p => {
         p(store)
     })
 
     const useSelector: UseHook<State> = (key) => {
-        const value = useSyncExternalStore(store.subscribeInternal, () => key(store.getState()))
+        const serverState = useServerStateProvider()
+        const getSnapshot = useCallback(() => {
+            if (serverState !== null) {
+                return key(serverState)
+            } else {
+                return key(store.getState())
+            }
+        }, [])
+
+        const value = useSyncExternalStore(store.subscribeInternal, getSnapshot, getSnapshot)
         const path = useMemo(() => selectorToPath(key), [])
+
 
         const setValue: StateSetter<ReturnType<typeof key>> = useCallback((update) => {
             const oldValue = key(store.getState())
@@ -47,10 +59,20 @@ export const create = <State extends TObject>(initialState: State, plugins?: Plu
         store.notifyListeners(['internal', 'external', 'channel'])
     }
 
+    let isServerStateInitialized = false
+    const initServerState = (newState: State) => {
+        if (!isServerStateInitialized) {
+            store.setState(newState)
+            isServerStateInitialized = true
+        }
+    }
+
     return {
         getState: store.getState,
         setState: setStateWrapper,
         subscribe: store.subscribeExternal,
+        ServerStateProvider,
+        initServerState,
         useSelector
     }
 }

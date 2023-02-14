@@ -16,6 +16,7 @@ A small, fast and no-boilerplate state-management library for react, using hooks
    - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
    - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
    - [Subscribing to changes in a store from outside of react](#subscribing-to-changes-in-a-store-from-outside-of-react)  
+   - [Server side state initialization](#server-side-state-initialization)
 4. [Plugins](#plugins)  
    - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
    - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
@@ -150,6 +151,54 @@ export const Counter = () => {
             <button onClick={() => setValue(current => current - 1)}>- 1</button>
         </div>
     )
+}
+```
+
+### Server side state initialization
+
+```tsx
+import { InferGetServerSidePropsType } from 'next'
+import { create } from "@gapu/react-controller";
+
+
+// Create the state like usual and extract 'ServerSideStateProvider' and
+// 'initServerState' fields.
+export const { ServerStateProvider, initServerState, useSelector } = create({
+  count: -57
+})
+
+
+// fetch the initial data for the store.
+export const getServerSideProps = () => {
+  return {
+    props: {
+      initialState: {
+        count: 1_000_000
+      }
+    }
+  }
+}
+
+export default function Home(
+  { initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+  // **IMPORTANT** you should call this function before any 'useSelector'
+  initServerState(initialState)
+
+  // After calling 'initServerState' you can safely call 'useSelector'
+  // functions
+  const [count, setCount] = useSelector(state => state.count) // 1_000_000
+
+  // Sadly we still have to rely on context providers in the case of SSR.
+  return (
+    <ServerStateProvider state={initialState}>
+      <div>
+        <h3>Count is {count}</h3>
+        <button onClick={() => setCount(current => current + 1)}>+ 1</button>
+        <button onClick={() => setCount(current => current - 1)}>- 1</button>
+      </div>
+    </ServerStateProvider>
+  )
 }
 ```
 

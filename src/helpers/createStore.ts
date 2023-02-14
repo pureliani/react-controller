@@ -50,7 +50,6 @@ export const createStore = <State extends TObject>(store: State) => {
         }
     }
 
-
     return {
         setState,
         getState,
