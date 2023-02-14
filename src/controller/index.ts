@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
 import { createStore } from '../helpers/createStore'
-import { createServerStateProvider } from '../helpers/createWithServerState'
+import { createServerStateProvider } from '../helpers/createServerStateProvider'
 import { selectorToPath } from "../helpers/selectorToPath"
 import { setNestedValue } from "../helpers/setNestedValue"
 import { persist } from '../plugins/persist'
