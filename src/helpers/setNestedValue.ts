@@ -20,7 +20,7 @@ export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
     if (len === 0) return structuredClone(value)
     for (var i = 0; i < len - 1; i++) {
         var elem = path[i];
-        if (!schema[elem]) throw new Error('@gapu/react-controller: setNestedValue - Invalid Path')
+        if (!schema[elem]) throw new Error('@gapu/deepstate: setNestedValue - Invalid Path')
         schema = schema[elem];
     }
 
