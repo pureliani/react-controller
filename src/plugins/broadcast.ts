@@ -7,8 +7,9 @@ export const broadcast = (name: string) => <State extends TObject>(store: Return
     store.subscribeChannel((state) => {
         channel.postMessage(state)
     })
-    channel.onmessage = (e: MessageEvent<ReturnType<typeof store.getRootState>>) => {
-        store.setRootStateWithoutChannels(e.data)
+    channel.onmessage = (e: MessageEvent<ReturnType<typeof store.getState>>) => {
+        store.setState(e.data)
+        store.notifyListeners(['internal', 'external'])
     }
     return store
 }

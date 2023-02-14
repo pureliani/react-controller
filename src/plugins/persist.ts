@@ -9,7 +9,8 @@ export const persist = (name: string) => <State extends TObject>(store: ReturnTy
     window.addEventListener('load', () => {
         const oldState = localStorage.getItem(name)
         if (!oldState) return
-        store.setRootState(JSON.parse(oldState))
+        store.setState(JSON.parse(oldState))
+        store.notifyListeners(['internal', 'external', 'channel'])
     })
     return store
 }
