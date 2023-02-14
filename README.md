@@ -16,7 +16,7 @@ A small, fast and no-boilerplate state-management library for react, using hooks
    - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
    - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
    - [Subscribing to changes in a store from outside of react](#subscribing-to-changes-in-a-store-from-outside-of-react)  
-   - [Server side state initialization](#server-side-state-initialization)
+   - [Server side state initialization ( Next.js )](#server-side-state-initialization--nextjs-)
 4. [Plugins](#plugins)  
    - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
    - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
@@ -154,7 +154,7 @@ export const Counter = () => {
 }
 ```
 
-### Server side state initialization
+### Server side state initialization ( Next.js )
 
 ```tsx
 import { InferGetServerSidePropsType } from 'next'
