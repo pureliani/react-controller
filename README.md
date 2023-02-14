@@ -9,18 +9,18 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 
 ## Navigation
 
-1. [Installation](https://github.com/pureliani/react-controller/edit/main/README.md#installation-)  
-2. [Description](https://github.com/pureliani/react-controller/edit/main/README.md#description)  
-3. [Usage](https://github.com/pureliani/react-controller/edit/main/README.md#usage)  
-   - [Basic](https://github.com/pureliani/react-controller/edit/main/README.md#basic)  
-   - [Getting the state of your store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#getting-the-state-of-your-store-from-outside-of-react)  
-   - [Setting the state of your store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#setting-the-state-of-your-store-from-outside-of-react)  
-   - [Subscribing to changes in a store from outside of react](https://github.com/pureliani/react-controller/edit/main/README.md#subscribing-to-changes-in-a-store-from-outside-of-react)  
-4. [Plugins](https://github.com/pureliani/react-controller/edit/main/README.md#plugins)  
-   - [Persisting state with the 'persist' plugin](https://github.com/pureliani/react-controller/edit/main/README.md#persisting-state-with-the-persist-plugin)
-   - [Sharing state between browser tabs with the 'broadcast' plugin](https://github.com/pureliani/react-controller/edit/main/README.md#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
-   - [Using both persist and broadcast in conjunction](https://github.com/pureliani/react-controller/edit/main/README.md#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
-5. [Planned Features](https://github.com/pureliani/react-controller/edit/main/README.md#planned-features)
+1. [Installation](#installation-)  
+2. [Description](#description)  
+3. [Usage](#usage)  
+   - [Basic](#basic)  
+   - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
+   - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
+   - [Subscribing to changes in a store from outside of react](#subscribing-to-changes-in-a-store-from-outside-of-react)  
+4. [Plugins](#plugins)  
+   - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
+   - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
+   - [Using both persist and broadcast in conjunction](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
+5. [Planned Features](#planned-features)
 
 ## Installation ⚡
 
