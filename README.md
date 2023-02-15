@@ -14,9 +14,9 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 3. [Usage](#usage)  
    - [Primitive store](#primitive-store)  
    - [Complex store](#complex-store)  
-   - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
-   - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
-   - [Subscribing to changes](#subscribing-to-changes-in-a-store-from-outside-of-react)  
+   - [Getting the state from outside of react](#getting-the-state-from-outside-of-react)  
+   - [Setting the state from outside of react](#setting-the-state-from-outside-of-react)  
+   - [Subscribing to changes](#subscribing-to-changes)  
    - [Server side state initialization ( Next.js )](#server-side-state-initialization--nextjs-)
 4. [Plugins](#plugins)  
    - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
@@ -27,14 +27,14 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 ## Installation ⚡
 
 > **Warning**  
-> deepstate only supports react version >= 16.8.0
+> Deepstate only supports react version >= 16.8.0
 
 ```shell
 npm install @gapu/deepstate
 ```
 
 ## Description
-deepstate is a state-management library which is aimed at making nested state managemenet easier.
+Deepstate is a state-management library which is aimed at making nested state managemenet easier.
 
 > **Note**  
 > **This library is still in development** and i'm planning on adding features such as: Asynchronous state initialization, SSR support, State Synchronization between browser tabs and redux devtools integration.  
@@ -106,7 +106,7 @@ export const Counter = () => {
 }
 ```
 
-### Getting the state of your store from outside of react
+### Getting the state from outside of react
 
 ```tsx
 import { create } from '@gapu/deepstate'
@@ -131,7 +131,7 @@ export const Counter = () => {
 }
 ```
 
-### Setting the state of your store from outside of react
+### Setting the state from outside of react
 
 ```tsx
 import { create } from '@gapu/deepstate'
@@ -155,7 +155,7 @@ export const Counter = () => {
 }
 ```
 
-### Subscribing to changes in a store from outside of react
+### Subscribing to changes
 
 ```tsx
 import { create } from '@gapu/deepstate'
