@@ -50,8 +50,6 @@ Deepstate is a state-management library which is aimed at making nested state ma
 > **Note**  
 > **Context providers are not needed.**
 
-When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
-
 ### Primitive store
 
 ```tsx
@@ -78,6 +76,8 @@ export const Counter = () => {
 ```
 
 ### Complex store
+
+When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
 
 ```tsx
 import { create } from '@gapu/deepstate'
