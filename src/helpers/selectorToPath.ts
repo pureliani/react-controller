@@ -1,6 +1,4 @@
-import { TObject } from "../controller"
-
-type Path = (string | symbol | number)[]
+import type { Path, TObject } from "../types"
 
 export const selectorToPath = (tracker: Function): Path => {
     const path: Path = []

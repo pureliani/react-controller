@@ -1,19 +1,11 @@
-type TObject = { [key: string | symbol | number]: any };
-
-type SetNestedValueArgs<TTarget extends TObject> = {
+type SetNestedValueArgs<TTarget> = {
     state: TTarget
     path: (string | symbol | number)[]
     value: any
 }
 
-type SetNestedValue = <TTarget extends TObject>(args: SetNestedValueArgs<TTarget>) => TTarget
+type SetNestedValue = <TTarget>(args: SetNestedValueArgs<TTarget>) => TTarget
 
-/**
- * @param target An object which contains the nested field 
- * @param path An array of type 'string' - representing the path to the field. 
- * @param value The new value of this field.
- * @returns Deep clone of the target object via 'JSON.parse(JSON.stringify())'
- */
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
     var schema = structuredClone(state);
     var len = path.length;

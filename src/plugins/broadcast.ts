@@ -1,15 +1,13 @@
-import { TObject } from "../controller";
-import { createStore } from "../helpers/createStore";
+import type { Plugin } from "../types";
 
-export const broadcast = (name: string) => <State extends TObject>(store: ReturnType<typeof createStore<State>>) => {
-    if (typeof window === 'undefined') return store
+export const broadcast: Plugin = (name: string) => (store) => {
+    if (typeof window === 'undefined') return
     const channel = new BroadcastChannel(name)
     store.subscribeChannel((state) => {
         channel.postMessage(state)
     })
     channel.onmessage = (e: MessageEvent<ReturnType<typeof store.getState>>) => {
         store.setState(e.data)
-        store.notifyListeners(['internal', 'external'])
+        store.notify(['internal', 'external'])
     }
-    return store
 }

@@ -1,15 +1,16 @@
-import React, { createContext, ReactNode, useContext } from "react"
-import { TObject } from "../controller"
+import React, { createContext, useContext } from "react"
+import { ServerStateProviderComponent } from "../types"
 
-export const createServerStateProvider = <State extends TObject,>() => {
+export const createServerStateProvider = <State,>() => {
     const context = createContext<State | null >(null)
     
+    const ServerStateProvider: ServerStateProviderComponent<State> = ({state, children}) => {
+        return <context.Provider value={state}>{children}</context.Provider>
+    }
+    const useServerStateProvider = () => useContext(context)
+
     return {
-        ServerStateProvider({ children, state }: {children:  ReactNode, state: State}){
-            return <context.Provider value={state}>{children}</context.Provider>
-        },
-        useServerStateProvider(){
-            return useContext(context)
-        }
+        ServerStateProvider,
+        useServerStateProvider
     } 
 }

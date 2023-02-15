@@ -1,22 +1,14 @@
 import { useCallback, useMemo } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
-import { createStore } from '../helpers/createStore'
+import { createStore } from '../helpers/createStoreAPI'
 import { createServerStateProvider } from '../helpers/createServerStateProvider'
 import { selectorToPath } from "../helpers/selectorToPath"
 import { setNestedValue } from "../helpers/setNestedValue"
-import { persist } from '../plugins/persist'
+import type { CreateStore, StateSetter, UseSelector } from '../types'
 
-export type TObject = { [key: string | number | symbol]: any }
+export const create: CreateStore = (initialState, plugins) => {
+    type State = typeof initialState
 
-export type Listener = () => void
-
-export type StateSetter<State> = (update: State | ((state: State) => State)) => void
-
-type Plugins = (ReturnType<typeof persist>)[]
-
-type UseHook<State> = <TSelected>(key: (state: State) => TSelected) => [TSelected, StateSetter<TSelected>]
-
-export const create = <State extends TObject>(initialState: State, plugins?: Plugins) => {
     const store = createStore(initialState)
     const { ServerStateProvider, useServerStateProvider } = createServerStateProvider<State>()
 
@@ -24,7 +16,7 @@ export const create = <State extends TObject>(initialState: State, plugins?: Plu
         p(store)
     })
 
-    const useSelector: UseHook<State> = (key) => {
+    const useSelector: UseSelector<State> = (key) => {
         const serverState = useServerStateProvider()
         const getSnapshot = useCallback(() => {
             if (serverState !== null) {
@@ -48,7 +40,7 @@ export const create = <State extends TObject>(initialState: State, plugins?: Plu
             }
             const nextRootState = setNestedValue({ state: store.getState(), path, value: nextValue })
             store.setState(nextRootState)
-            store.notifyListeners(['internal', 'external', 'channel'])
+            store.notify(['internal', 'external', 'channel'])
         }, [])
 
         return [value, setValue]
@@ -56,7 +48,7 @@ export const create = <State extends TObject>(initialState: State, plugins?: Plu
 
     const setStateWrapper: typeof store.setState = (update) => {
         store.setState(update)
-        store.notifyListeners(['internal', 'external', 'channel'])
+        store.notify(['internal', 'external', 'channel'])
     }
 
     let isServerStateInitialized = false

@@ -1,36 +1,33 @@
-import { Listener, StateSetter, TObject } from "../controller";
+import type { InternalListener, Listener, ListenerType, StateSetter, StoreAPI } from "../types";
 
-type StateListener<State> = (state: State) => void
-type ListenerType = ('internal' | 'external' | 'channel')
-
-export const createStore = <State extends TObject>(store: State) => {
+export const createStore = <State>(store: State): StoreAPI<State> => {
     let state = store
     const getState = () => state
-    const internalListeners = new Set<Listener>()
-    const externalListeners = new Set<StateListener<State>>()
-    const channelListeners = new Set<StateListener<State>>()
-    const subscribeInternal = (listener: Listener) => {
+    const internalListeners = new Set<InternalListener>()
+    const externalListeners = new Set<Listener<State>>()
+    const channelListeners = new Set<Listener<State>>()
+    const subscribeInternal = (listener: InternalListener) => {
         internalListeners.add(listener)
         return () => {
             internalListeners.delete(listener)
         }
     }
 
-    const subscribeExternal = (listener: StateListener<State>) => {
+    const subscribeExternal = (listener: Listener<State>) => {
         externalListeners.add(listener)
         return () => {
             externalListeners.delete(listener)
         }
     }
 
-    const subscribeChannel = (listener: StateListener<State>) => {
+    const subscribeChannel = (listener: Listener<State>) => {
         channelListeners.add(listener)
         return () => {
             channelListeners.delete(listener)
         }
     }
 
-    const notifyListeners = (listeners: ListenerType[]) => {
+    const notify = (listeners: ListenerType[]) => {
         if (listeners.includes('internal')) {
             internalListeners.forEach(listener => listener())
         }
@@ -53,7 +50,7 @@ export const createStore = <State extends TObject>(store: State) => {
     return {
         setState,
         getState,
-        notifyListeners,
+        notify,
         subscribeInternal,
         subscribeExternal,
         subscribeChannel

@@ -1,8 +1,7 @@
-import { TObject } from "../controller";
-import { createStore } from "../helpers/createStore";
+import type { Plugin } from "../types";
 
-export const persist = (name: string) => <State extends TObject>(store: ReturnType<typeof createStore<State>>) => {
-    if (typeof window === 'undefined') return store
+export const persist: Plugin = (name: string) => (store) => {
+    if (typeof window === 'undefined') return
     store.subscribeExternal((state) => {
         localStorage.setItem(name, JSON.stringify(state))
     })
@@ -10,7 +9,6 @@ export const persist = (name: string) => <State extends TObject>(store: ReturnTy
         const oldState = localStorage.getItem(name)
         if (!oldState) return
         store.setState(JSON.parse(oldState))
-        store.notifyListeners(['internal', 'external', 'channel'])
+        store.notify(['internal', 'external', 'channel'])
     })
-    return store
 }
