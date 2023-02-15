@@ -16,7 +16,8 @@ export const create: CreateStore = (initialState, plugins) => {
       p(store)
     })
 
-    const useSelector: UseSelector<State> = (key) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const useSelector: UseSelector<State> = (key = state => state as any) => {
       const serverState = useServerStateProvider()
       const getSnapshot = useCallback(() => {
         if (serverState !== null) {

@@ -1,16 +1,16 @@
-import type { Path, TObject } from '../types'
+import type { Path } from '../types'
 
 type Tracker<State> = (store: State) => unknown
 
-export const selectorToPath = <State extends TObject>(tracker: Tracker<State>): Path => {
+export const selectorToPath = (tracker: Tracker<Record<string | number | symbol, never>>): Path => {
   const path: Path = []
-  const handler: ProxyHandler<State> = {
+  const handler: ProxyHandler<Record<string | number | symbol, never>> = {
     get(t, p) {
       path.push(p)
-      return new Proxy({} as State, handler)
+      return new Proxy({}, handler)
     }
   }
-  const trackerProxy = new Proxy({} as State, handler)
+  const trackerProxy = new Proxy({}, handler)
   tracker(trackerProxy)
   return path
 }

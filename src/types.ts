@@ -40,7 +40,7 @@ export type ServerStateProviderComponent<State> = (arg: ServerStateProviderArg<S
 
 export type initServerStateFunction<State> = (state: State) => void
 
-export type UseSelector<State> = <TSelected>(key: (state: State) => TSelected) => [TSelected, StateSetter<TSelected>]
+export type UseSelector<State> = <TSelected = State>(key?: (state: State) => TSelected) => [TSelected, StateSetter<TSelected>]
 
 export type CreatedStore<State> = {
   getState: StoreAPI<State>['getState']
@@ -51,4 +51,4 @@ export type CreatedStore<State> = {
   useSelector: UseSelector<State>
 }
 
-export type CreateStore = <State extends TObject>(initialState: State, plugins?: ReturnType<Plugin>[]) => CreatedStore<State>
+export type CreateStore = <State>(initialState: State, plugins?: ReturnType<Plugin>[]) => CreatedStore<State>

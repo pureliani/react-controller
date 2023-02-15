@@ -12,10 +12,11 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 1. [Installation](#installation-)  
 2. [Description](#description)  
 3. [Usage](#usage)  
-   - [Basic](#basic)  
+   - [Primitive store](#primitive-store)  
+   - [Complex store](#complex-store)  
    - [Getting the state of your store from outside of react](#getting-the-state-of-your-store-from-outside-of-react)  
    - [Setting the state of your store from outside of react](#setting-the-state-of-your-store-from-outside-of-react)  
-   - [Subscribing to changes in a store from outside of react](#subscribing-to-changes-in-a-store-from-outside-of-react)  
+   - [Subscribing to changes](#subscribing-to-changes-in-a-store-from-outside-of-react)  
    - [Server side state initialization ( Next.js )](#server-side-state-initialization--nextjs-)
 4. [Plugins](#plugins)  
    - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
@@ -46,11 +47,38 @@ deepstate is a state-management library which is aimed at making nested state ma
 
 ## Usage
 
-When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
-
-### Basic
 > **Note**  
 > **Context providers are not needed.**
+
+When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
+
+### Primitive store
+
+```tsx
+import { create } from '@gapu/deepstate'
+
+const { useSelector } = create(11)
+
+export const Counter = () => {
+
+    // useSelector usually takes a selector function as an argument but
+    // in this case we don't really need it since we are working with
+    // a primitive store, not passing a selector will select the root of the
+    // store by default, in this case: 11
+    const [value, setValue] = useSelector()
+
+    return (
+        <div>
+            <h3>Count: {value}</h3>
+            <button onClick={() => setValue(current => current + 1)}>+ 1</button>
+            <button onClick={() => setValue(current => current - 1)}>- 1</button>
+        </div>
+    )
+}
+```
+
+### Complex store
+
 ```tsx
 import { create } from '@gapu/deepstate'
 
@@ -63,9 +91,9 @@ const { useSelector } = create({
 })
 
 // useSelector takes a selector function as an argument which will subscribe the
-//  component to changes on that specific field. Now, the "Counter" component
-//  will only rerender when the state.a.b changes. Changing state.a.c or state.d
-//  will not trigger a rerender of this component.
+// component to changes on that specific field. Now, the "Counter" component
+// will only rerender when the state.a.b changes. Changing state.a.c or state.d
+// will not trigger a rerender of this component.
 export const Counter = () => {
     const [value, setValue] = useSelector(state => state.a.b)
     return (
