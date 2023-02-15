@@ -43,6 +43,7 @@ module.exports = {
       'never'
     ],
     'no-multiple-empty-lines': 'error',
-    'eol-last': ['error', 'always']
+    'eol-last': ['error', 'always'],
+    'react/react-in-jsx-scope': 'off'
   }
 }

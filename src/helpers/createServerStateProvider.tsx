@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react'
 import type { ServerStateProviderComponent } from '../types'
 
 export const createServerStateProvider = <State,>() => {
