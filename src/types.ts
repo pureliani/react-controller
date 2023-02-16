@@ -46,7 +46,6 @@ export type CreatedStore<State> = {
   getState: StoreAPI<State>['getState']
   setState: StoreAPI<State>['setState']
   subscribe: StoreAPI<State>['subscribeExternal']
-  ServerStateProvider: ServerStateProviderComponent<State>
   initServerState: initServerStateFunction<State>
   useSelector: UseSelector<State>
 }

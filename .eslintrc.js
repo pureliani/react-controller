@@ -7,7 +7,8 @@ module.exports = {
   'extends': [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended'
   ],
   'overrides': [
   ],
@@ -44,6 +45,7 @@ module.exports = {
     ],
     'no-multiple-empty-lines': 'error',
     'eol-last': ['error', 'always'],
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'react-hooks/exhaustive-deps': 'error'
   }
 }

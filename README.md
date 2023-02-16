@@ -185,47 +185,35 @@ export const Counter = () => {
 ### Server side state initialization ( Next.js )
 
 ```tsx
+import { create } from '@gapu/deepstate'
 import { InferGetServerSidePropsType } from 'next'
-import { create } from "@gapu/deepstate";
 
+const { initServerState, useSelector } = create({ a: { b: 1 } })
 
-// Create the state like usual and extract 'ServerSideStateProvider' and
-// 'initServerState' fields.
-export const { ServerStateProvider, initServerState, useSelector } = create({
-  count: -57
-})
-
-
-// fetch the initial data for the store.
 export const getServerSideProps = () => {
   return {
     props: {
+      // ** NOTE ** this must have the same structure as the store
       initialState: {
-        count: 1_000_000
+        a: {
+          b: 88
+        }
       }
     }
   }
 }
 
-export default function Home(
-  { initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
-  // **IMPORTANT** you should call this function before any 'useSelector'
+export default function Home({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // ** IMPORTANT ** call this function before any 'useSelector'
   initServerState(initialState)
 
-  // After calling 'initServerState' you can safely call 'useSelector'
-  // functions
-  const [count, setCount] = useSelector(state => state.count) // 1_000_000
-
-  // Sadly we still have to rely on context providers in the case of SSR.
+  const [count, setCount] = useSelector(state => state.a.b)
   return (
-    <ServerStateProvider state={initialState}>
-      <div>
-        <h3>Count is {count}</h3>
-        <button onClick={() => setCount(current => current + 1)}>+ 1</button>
-        <button onClick={() => setCount(current => current - 1)}>- 1</button>
-      </div>
-    </ServerStateProvider>
+    <div>
+      <h3>Count is {count}</h3>
+      <button onClick={() => setCount(current => current + 1)}>+ 1</button>
+      <button onClick={() => setCount(current => current - 1)}>- 1</button>
+    </div>
   )
 }
 ```

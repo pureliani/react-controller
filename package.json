@@ -53,6 +53,7 @@
     "react": ">=16.8.0"
   },
   "dependencies": {
+    "eslint-plugin-react-hooks": "4.6.0",
     "use-sync-external-store": "1.2.0"
   }
 }
