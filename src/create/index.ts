@@ -39,7 +39,7 @@ export const create: CreateStore = (initialState, plugins) => {
         } else {
           nextValue = update
         }
-        const nextRootState = setNestedValue({ state: store.getState(), path, value: nextValue })
+        const nextRootState = setNestedValue<State>({ state: store.getState(), path, value: nextValue })
         store.setState(nextRootState)
         store.notify(['internal', 'external', 'channel'])
       }, [path, value])

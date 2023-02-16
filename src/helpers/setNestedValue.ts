@@ -1,10 +1,11 @@
-type SetNestedValueArgs<State> = {
-  state: State
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type SetNestedValueArgs = {
+  state: any
   path: (string | symbol | number)[]
-  value: unknown
+  value: any
 }
 
-type SetNestedValue = <State>(args: SetNestedValueArgs<State>) => State
+type SetNestedValue = <State>(args: SetNestedValueArgs) => State
 
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
   const clone = structuredClone(state)

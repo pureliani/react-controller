@@ -6,7 +6,7 @@ const { useSelector } = create(0)
 
 global.structuredClone = (v: unknown) => JSON.parse(JSON.stringify(v))
 
-const TestComponent = () => {
+const PrimitiveStoreTestComponent = () => {
   const [count, setCount] = useSelector()
   return <div>
     <div data-testid='counter'>Count: {count}</div>
@@ -17,7 +17,7 @@ const TestComponent = () => {
 }
 
 test('Changes count based on current count', async () => {
-  const { getByTestId } = render(<TestComponent />)
+  const { getByTestId } = render(<PrimitiveStoreTestComponent />)
   const counter = getByTestId('counter')
   const plus = getByTestId('+')
   const minus = getByTestId('-')
@@ -36,7 +36,7 @@ test('Changes count based on current count', async () => {
 })
 
 test('Sets the count to a specific number', async () => {
-  const { getByTestId } = render(<TestComponent />)
+  const { getByTestId } = render(<PrimitiveStoreTestComponent />)
   const counter = getByTestId('counter')
   const equalsThousand = getByTestId('set:1000')
   await waitFor(() => {
