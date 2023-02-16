@@ -7,5 +7,6 @@
     "typescript.format.enable": false,
     "css.format.enable": false,
     "less.format.enable": false,
-    "scss.format.enable": false
+    "scss.format.enable": false,
+    "files.eol": "\n"
 }
