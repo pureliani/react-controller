@@ -1,10 +1,10 @@
-type SetNestedValueArgs<TTarget> = {
-  state: TTarget
+type SetNestedValueArgs<State> = {
+  state: State
   path: (string | symbol | number)[]
   value: unknown
 }
 
-type SetNestedValue = <TTarget>(args: SetNestedValueArgs<TTarget>) => TTarget
+type SetNestedValue = <State>(args: SetNestedValueArgs<State>) => State
 
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
   const clone = structuredClone(state)
