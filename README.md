@@ -37,7 +37,7 @@ npm install @gapu/deepstate
 Deepstate is a state-management library which is aimed at making nested state managemenet easier.
 
 > **Note**  
-> **This library is still in development** and i'm planning on adding features such as: Asynchronous state initialization, SSR support, State Synchronization between browser tabs and redux devtools integration.  
+> **This library is still in development**
 >  
 > Version 1.0.0 will be released only after the planned features are implemented and the remaining bugs are fixed. 
 >  
