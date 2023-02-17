@@ -16,12 +16,14 @@ export const create: CreateStore = (initialState, plugins) => {
     
     let isServerStateInitialized = false
     const initServerState = (newState: State) => {
-      if (!isServerStateInitialized) {
+      if (typeof window !== 'undefined' && !isServerStateInitialized) {
         store.setState(newState)
         isServerStateInitialized = true
-      }
+      } else {
+        store.setState(newState)
+      } 
     }
-
+      
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const useSelector: UseSelector<State> = (key = state => state as any) => {
       const getSnapshot = useCallback(() => {
