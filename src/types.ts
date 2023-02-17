@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 export type TObject = { [key: string | symbol | number]: unknown }
 
 export type Path = (string | symbol | number)[]
@@ -31,18 +29,11 @@ export type StoreAPI<State> = {
 
 export type Plugin = (name: string) => <State>(storeAPI: StoreAPI<State>) => void
 
-export type ServerStateProviderArg<State> = {
-  children: ReactNode
-  state: State
-}
-
-export type ServerStateProviderComponent<State> = (arg: ServerStateProviderArg<State>) => JSX.Element
-
 export type initServerStateFunction<State> = (state: State) => void
 
 export type UseSelector<State> = <TSelected = State>(key?: (state: State) => TSelected) => [TSelected, StateSetter<TSelected>]
 
-export type CreatedStore<State> = {
+export type Store<State> = {
   getState: StoreAPI<State>['getState']
   setState: StoreAPI<State>['setState']
   subscribe: StoreAPI<State>['subscribeExternal']
@@ -50,4 +41,4 @@ export type CreatedStore<State> = {
   useSelector: UseSelector<State>
 }
 
-export type CreateStore = <State>(initialState: State, plugins?: ReturnType<Plugin>[]) => CreatedStore<State>
+export type CreateStore = <State>(initialState: State, plugins?: ReturnType<Plugin>[]) => Store<State>
