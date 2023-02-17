@@ -17,11 +17,3 @@ export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
   (<any>current)[path[path.length - 1]] = value
   return clone as typeof state
 }
-
-const stateExample = {
-  a: {
-    b: 3
-  }
-}
-
-const result = setNestedValue({state: stateExample, path: ['a', 'b'], value: 144 })
