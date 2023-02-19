@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useSyncExternalStore } from 'use-sync-external-store/shim'
-import { createStore } from '../helpers/createStoreAPI'
+import { createStoreAPI } from '../helpers/createStoreAPI'
 import { selectorToPath } from '../helpers/selectorToPath'
 import { setNestedValue } from '../helpers/setNestedValue'
 import type { CreateStore, StateSetter, UseSelector } from '../types'
@@ -8,30 +8,30 @@ import type { CreateStore, StateSetter, UseSelector } from '../types'
 export const create: CreateStore = (initialState, plugins) => {
     type State = typeof initialState
 
-    const store = createStore(initialState)
+    const storeAPI = createStoreAPI(initialState)
 
     plugins?.forEach(p => {
-      p(store)
+      p(storeAPI)
     })
     
     let isServerStateInitialized = false
     const initServerState = (newState: State) => {
       if (typeof window !== 'undefined' && !isServerStateInitialized) {
-        store.setState(newState)
+        storeAPI.setState(newState)
         isServerStateInitialized = true
       } else {
-        store.setState(newState)
+        storeAPI.setState(newState)
       } 
     }
       
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const useSelector: UseSelector<State> = (key = state => state as any) => {
       const getSnapshot = useCallback(() => {
-        return key(store.getState())
+        return key(storeAPI.getState())
       }, [key])
 
      
-      const value = useSyncExternalStore(store.subscribeInternal, getSnapshot, getSnapshot)
+      const value = useSyncExternalStore(storeAPI.subscribeInternal, getSnapshot, getSnapshot)
       const path = useMemo(() => selectorToPath(key), [key])
 
       const setValue: StateSetter<ReturnType<typeof key>> = useCallback((update) => {
@@ -41,23 +41,23 @@ export const create: CreateStore = (initialState, plugins) => {
         } else {
           nextValue = update
         }
-        const nextRootState = setNestedValue<State>({ state: store.getState(), path, value: nextValue })
-        store.setState(nextRootState)
-        store.notify(['internal', 'external', 'channel'])
+        const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: nextValue })
+        storeAPI.setState(nextRootState)
+        storeAPI.notify(['internal', 'external', 'channel'])
       }, [path, value])
 
       return [value, setValue]
     }
 
-    const setStateWrapper: typeof store.setState = (update) => {
-      store.setState(update)
-      store.notify(['internal', 'external', 'channel'])
+    const setStateWrapper: typeof storeAPI.setState = (update) => {
+      storeAPI.setState(update)
+      storeAPI.notify(['internal', 'external', 'channel'])
     }
 
     return {
-      getState: store.getState,
+      getState: storeAPI.getState,
       setState: setStateWrapper,
-      subscribe: store.subscribeExternal,
+      subscribe: storeAPI.subscribeExternal,
       initServerState,
       useSelector
     }

@@ -1,6 +1,6 @@
 import type { InternalListener, Listener, ListenerType, StateSetter, StoreAPI } from '../types'
 
-export const createStore = <State>(store: State): StoreAPI<State> => {
+export const createStoreAPI = <State>(store: State): StoreAPI<State> => {
   let state = store
   const getState = () => state
   const internalListeners = new Set<InternalListener>()
