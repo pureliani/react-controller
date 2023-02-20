@@ -23,7 +23,12 @@ export const create: CreateStore = (initialState, plugins) => {
         storeAPI.setState(newState)
       } 
     }
-      
+    
+    const setStateWrapper: typeof storeAPI.setState = (update) => {
+      storeAPI.setState(update)
+      storeAPI.notify(['internal', 'external', 'channel'])
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const useSelector: UseSelector<State> = (key = state => state as any) => {
       const getSnapshot = useCallback(() => {
@@ -35,23 +40,18 @@ export const create: CreateStore = (initialState, plugins) => {
       const path = useMemo(() => selectorToPath(key), [key])
 
       const setValue: StateSetter<ReturnType<typeof key>> = useCallback((update) => {
-        let nextValue: typeof value | null = null
         if (update instanceof Function) {
-          nextValue = update(value)
+          Promise.resolve(update(value)).then(newValue => {
+            const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: newValue })
+            setStateWrapper(nextRootState)
+          })
         } else {
-          nextValue = update
+          const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: update })
+          setStateWrapper(nextRootState)
         }
-        const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: nextValue })
-        storeAPI.setState(nextRootState)
-        storeAPI.notify(['internal', 'external', 'channel'])
       }, [path, value])
 
       return [value, setValue]
-    }
-
-    const setStateWrapper: typeof storeAPI.setState = (update) => {
-      storeAPI.setState(update)
-      storeAPI.notify(['internal', 'external', 'channel'])
     }
 
     return {

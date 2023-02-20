@@ -9,7 +9,7 @@ type SetNestedValue = <State>(args: SetNestedValueArgs<State>) => State
 
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
   const clone = structuredClone(state)
-  if(path.length === 0) return structuredClone(value)
+  if(path.length === 0) return value
   let current = clone
   path.slice(0,-1).forEach(p=>{
     current = (<any>current)[p]

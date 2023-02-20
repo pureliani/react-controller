@@ -14,6 +14,7 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 3. [Usage](#usage)  
    - [Primitive store](#primitive-store)  
    - [Complex store](#complex-store)  
+   - [Asynchronous actions](#asynchronous-actions)
    - [Getting the state from outside of react](#getting-the-state-from-outside-of-react)  
    - [Setting the state from outside of react](#setting-the-state-from-outside-of-react)  
    - [Subscribing to changes](#subscribing-to-changes)  
@@ -22,6 +23,7 @@ A small, fast and no-boilerplate state-management library for react, using hooks
    - [Persisting state with the 'persist' plugin](#persisting-state-with-the-persist-plugin)
    - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
    - [Using both persist and broadcast in conjunction](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
+   - [Custom plugins](#custom-plugins)
 5. [Planned Features](#planned-features)
 
 ## Installation ⚡
@@ -104,6 +106,44 @@ export const Counter = () => {
         </div>
     )
 }
+```
+
+### Asynchronous actions
+
+```tsx
+import { create } from '@gapu/deepstate'
+
+// Mock API call
+const incrementRemoteCounter = (): Promise<number> => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res(Math.floor(Math.random()*1000))
+    },  1 * 1000)
+  })
+} 
+
+const { useSelector } = create({ count: 1 })
+
+function App() {
+  const [count, setCount] = useSelector(state => state.count)
+
+  return (
+    <div>
+      <div>Count: {count}</div>
+      <button onClick={() => setCount(async () => {
+        // if an error gets thrown or a promise gets rejected, state will not
+        // get updated.
+        const newNumber = await incrementRemoteCounter()
+
+        return newNumber
+      })}>
+        Sync with remote counter
+      </button>
+    </div>
+  )
+}
+
+export default App
 ```
 
 ### Getting the state from outside of react
@@ -304,6 +344,72 @@ export const Counter = () => {
 }
 ```
 
+### Custom plugins
+
+```tsx
+import { create, Plugin } from '@gapu/deepstate'
+
+// 'myLoggerPlugin' function will be invoked ONLY ONCE and 
+// as soon as the 'storeAPI' gets created.
+// you will need to pass a name to this plugin even if you dont need it.
+const myLoggerPlugin: Plugin = (name) => (storeAPI) => {
+  const {
+    //Get the root state of the store
+    getState, 
+    
+    // Set the root state of the store
+    // This will not cause a rerender, if you want to do that, call the
+    // 'notify' function with 'internal' as an argument right after setting the
+    // state, e.g: notify(['internal'])
+    setState,
+
+    // notify(['internal']) - rerender components which are using the 
+    // 'useSelector' hook, (rerender will only happen if the returned value from 
+    // selector is different from the previous render as compared by Object.is )
+    
+    // notify(['channel']) - trigger the channel subscribers ( used by the
+    // broadcast plugin ). 
+
+    // notify(['external']) - trigger subscribers
+    // e.g: subscribe((newState) => {console.log(newState)})
+    notify,
+    
+    // This is used by react itself so we don't really need to touch this
+    subscribeInternal,
+
+    // Same as the 'subscribe' method returned by the 'create' function
+    subscribeExternal,
+    
+    // Used by the 'broadcast' plugin, most likely you don't need this
+    subscribeChannel
+  } = storeAPI
+
+
+  subscribeExternal((state) => {
+      console.log(state)
+  })
+} 
+
+const { useSelector } = create({ count: 1 }, [myLoggerPlugin('my-plugin')])
+
+
+function App() {
+  const [count, setCount] = useSelector(state => state.count)
+  return (
+    <div>
+      <div>Count: {count}</div>
+      <button onClick={() => setCount(current => current + 1)}>
+        + 1
+      </button>
+      <button onClick={() => setCount(current => current - 1)}>
+        - 1
+      </button>
+    </div>
+  )
+}
+
+export default App
+```
+
 ## Planned features  
 1. Callback state initialization  
-2. Asynchronous state initialization  
