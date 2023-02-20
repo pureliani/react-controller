@@ -114,7 +114,7 @@ export const Counter = () => {
 import { create } from '@gapu/deepstate'
 
 // Mock API call
-const incrementRemoteCounter = (): Promise<number> => {
+const getRandomRemoteNumber = (): Promise<number> => {
   return new Promise((res) => {
     setTimeout(() => {
       res(Math.floor(Math.random()*1000))
@@ -133,11 +133,11 @@ function App() {
       <button onClick={() => setCount(async () => {
         // if an error gets thrown or a promise gets rejected, state will not
         // get updated.
-        const newNumber = await incrementRemoteCounter()
+        const newNumber = await getRandomRemoteNumber()
 
         return newNumber
       })}>
-        Sync with remote counter
+        get random remote number
       </button>
     </div>
   )
