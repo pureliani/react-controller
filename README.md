@@ -1,11 +1,11 @@
 
-# @gapu/deepstate
+# @gapu/react-controller
 
 
 A small, fast and no-boilerplate state-management library for react, using hooks.
 
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/deepstate@latest?style=flat-square)](https://bundlephobia.com/package/@gapu/deepstate@latest)
-[![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://github.com/pureliani/deepstate/blob/main/LICENSE) [![npm (scoped)](https://img.shields.io/npm/v/@gapu/deepstate?color=blue&style=flat-square)](https://www.npmjs.com/package/@gapu/deepstate) [![GitHub Repo stars](https://img.shields.io/github/stars/pureliani/deepstate?label=GitHub%20Stars&style=flat-square)](https://github.com/pureliani/deepstate)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/@gapu/react-controller@latest?style=flat-square)](https://bundlephobia.com/package/@gapu/react-controller@latest)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://github.com/pureliani/react-controller/blob/main/LICENSE) [![npm (scoped)](https://img.shields.io/npm/v/@gapu/react-controller?color=blue&style=flat-square)](https://www.npmjs.com/package/@gapu/react-controller) [![GitHub Repo stars](https://img.shields.io/github/stars/pureliani/react-controller?label=GitHub%20Stars&style=flat-square)](https://github.com/pureliani/react-controller)
 
 ## Navigation
 
@@ -29,14 +29,14 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 ## Installation ⚡
 
 > **Warning**  
-> Deepstate only supports react version >= 16.8.0
+> react-controller only supports react version >= 16.8.0
 
 ```shell
-npm install @gapu/deepstate
+npm install @gapu/react-controller
 ```
 
 ## Description
-Deepstate is a state-management library which is aimed at making nested state managemenet easier.
+react-controller is a state-management library which is aimed at making nested state managemenet easier.
 
 > **Note**  
 > **This library is still in development**
@@ -45,7 +45,7 @@ Deepstate is a state-management library which is aimed at making nested state ma
 >  
 > Collaborators are welcome ❤  
 >
-> If you come across an issue please report it on our github issues page: https://github.com/pureliani/deepstate/issues 
+> If you come across an issue please report it on our github issues page: https://github.com/pureliani/react-controller/issues 
 
 ## Usage
 
@@ -55,7 +55,7 @@ Deepstate is a state-management library which is aimed at making nested state ma
 ### Primitive store
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 const { useSelector } = create(11)
 
@@ -82,7 +82,7 @@ export const Counter = () => {
 When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 const { useSelector } = create({
     a: {
@@ -111,7 +111,7 @@ export const Counter = () => {
 ### Asynchronous actions
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 // Mock API call
 const getRandomRemoteNumber = (): Promise<number> => {
@@ -149,7 +149,7 @@ export default App
 ### Getting the state from outside of react
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 const { getState, useSelector } = create({ count: 1 })
 
@@ -174,7 +174,7 @@ export const Counter = () => {
 ### Setting the state from outside of react
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 const { setState, getState, useSelector } = create({ count: 1 })
 
@@ -198,7 +198,7 @@ export const Counter = () => {
 ### Subscribing to changes
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 
 const { useSelector, subscribe } = create({ count: 1 })
 
@@ -225,7 +225,7 @@ export const Counter = () => {
 ### Server side state initialization ( Next.js )
 
 ```tsx
-import { create } from '@gapu/deepstate'
+import { create } from '@gapu/react-controller'
 import { InferGetServerSidePropsType } from 'next'
 
 const { initServerState, useSelector } = create({ a: { b: 1 } })
@@ -263,7 +263,7 @@ Currently we have only two plugins: persist and broadcast.
 
 ### Persisting state with the 'persist' plugin
 ```tsx
-import { create, persist } from '@gapu/deepstate'
+import { create, persist } from '@gapu/react-controller'
 
 // This state will be persisted in localStorage on the key 'localStorageKeyName'
 // before using this middleware make sure the data is serializable 
@@ -290,7 +290,7 @@ export const Counter = () => {
 
 ### Sharing state between browser tabs with the 'broadcast' plugin
 ```tsx
-import { create, broadcast } from '@gapu/deepstate'
+import { create, broadcast } from '@gapu/react-controller'
 
 // This state will be shared between browser tabs via BroadcastChannels on the
 // 'broadcastChannelName' channel. please make sure your state can be cloned 
@@ -318,7 +318,7 @@ export const Counter = () => {
 ### Using both persist and broadcast in conjunction
 
 ```tsx
-import { create, persist, broadcast } from '@gapu/deepstate'
+import { create, persist, broadcast } from '@gapu/react-controller'
 
 // This state will be shared between browser tabs via BroadcastChannels on the
 // 'broadcastChannelName' channel, data will also persisted in localStorage on
@@ -347,7 +347,7 @@ export const Counter = () => {
 ### Custom plugins
 
 ```tsx
-import { create, Plugin } from '@gapu/deepstate'
+import { create, Plugin } from '@gapu/react-controller'
 
 // 'myLoggerPlugin' function will be invoked ONLY ONCE and 
 // as soon as the 'storeAPI' gets created.
