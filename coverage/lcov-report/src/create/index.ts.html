@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.2% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/29</span>
+                <span class='fraction'>24/28</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>8/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.18% </span>
+                <span class="strong">84.61% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/27</span>
+                <span class='fraction'>22/26</span>
             </div>
         
             
@@ -123,11 +123,7 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,33 +150,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">68x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">56x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
@@ -217,9 +209,10 @@ export const create: CreateStore = (initialState, plugins) =&gt; {
       } 
     }
     
-    const setStateWrapper: typeof storeAPI.setState = (update) =&gt; {
-      storeAPI.setState(update)
+    const setStateWrapper: typeof storeAPI.setState = async (update) =&gt; {
+      const updatedState = await storeAPI.setState(update)
       storeAPI.notify(['internal', 'external', 'channel'])
+      return updatedState
     }
 &nbsp;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -232,16 +225,11 @@ export const create: CreateStore = (initialState, plugins) =&gt; {
       const value = useSyncExternalStore(storeAPI.subscribeInternal, getSnapshot, getSnapshot)
       const path = useMemo(() =&gt; selectorToPath(key), [key])
 &nbsp;
-      const setValue: StateSetter&lt;ReturnType&lt;typeof key&gt;&gt; = useCallback((update) =&gt; {
-        if (update instanceof Function) {
-          Promise.resolve(update(value)).then(newValue =&gt; {
-            const nextRootState = setNestedValue&lt;State&gt;({ state: storeAPI.getState(), path, value: newValue })
-            setStateWrapper(nextRootState)
-          })
-        } else {
-          const nextRootState = setNestedValue&lt;State&gt;({ state: storeAPI.getState(), path, value: update })
-          setStateWrapper(nextRootState)
-        }
+      const setValue: StateSetter&lt;ReturnType&lt;typeof key&gt;&gt; = useCallback(async (update) =&gt; {
+        const newValue = await (update instanceof Function ? Promise.resolve(update(value)) : Promise.resolve(update))
+        const nextRootState = setNestedValue&lt;State&gt;({ state: storeAPI.getState(), path, value: newValue })
+        await setStateWrapper(nextRootState)
+        return newValue
       }, [path, value])
 &nbsp;
       return [value, setValue]
@@ -262,7 +250,7 @@ export const create: CreateStore = (initialState, plugins) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-03-02T11:54:47.915Z
+                at 2023-03-02T20:03:11.397Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

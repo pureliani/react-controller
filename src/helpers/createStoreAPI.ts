@@ -1,4 +1,4 @@
-import type { InternalListener, Listener, ListenerType, StateSetter, StoreAPI } from '../types'
+import type { InternalListener, Listener, ListenerType, StateSetter, StoreAPI, Subscribe, SubscribeInternal } from '../types'
 
 export const createStoreAPI = <State>(store: State): StoreAPI<State> => {
   let state = store
@@ -6,21 +6,21 @@ export const createStoreAPI = <State>(store: State): StoreAPI<State> => {
   const internalListeners = new Set<InternalListener>()
   const externalListeners = new Set<Listener<State>>()
   const channelListeners = new Set<Listener<State>>()
-  const subscribeInternal = (listener: InternalListener) => {
+  const subscribeInternal: SubscribeInternal = (listener: InternalListener) => {
     internalListeners.add(listener)
     return () => {
       internalListeners.delete(listener)
     }
   }
 
-  const subscribeExternal = (listener: Listener<State>) => {
+  const subscribeExternal: Subscribe<State> = (listener: Listener<State>) => {
     externalListeners.add(listener)
     return () => {
       externalListeners.delete(listener)
     }
   }
 
-  const subscribeChannel = (listener: Listener<State>) => {
+  const subscribeChannel: Subscribe<State> = (listener: Listener<State>) => {
     channelListeners.add(listener)
     return () => {
       channelListeners.delete(listener)

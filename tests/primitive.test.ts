@@ -41,21 +41,30 @@ test('Works with asynchronous actions', async () => {
   expect(result.current[0]).toBe(1000)
 })
 
-test('Subscribes to the store changes', async () => {
+test('Subscribes and unsubscribes to the store changes', async () => {
   const { useSelector, subscribe } = create(5)
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   const mockSubscriber = jest.fn()
 
-  subscribe(mockSubscriber)
+  const unsubscribe = subscribe(mockSubscriber)
 
   act(() => {
     result.current[1](state=> state + 10)
   })
+  
+  await waitForNextUpdate()
+  expect(mockSubscriber).toBeCalledWith(15)
+  
+  unsubscribe()
 
+  act(() => {
+    result.current[1](state=> state + 10)
+  })
+  
   await waitForNextUpdate()
 
-  expect(mockSubscriber).toBeCalledWith(15)
+  expect(mockSubscriber).toBeCalledTimes(1)
 })
 
 test('Persists a primitive store via \'persist\' plugin', async () => {

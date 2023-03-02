@@ -10,7 +10,7 @@ export type SubscribeInternal = (listener: InternalListener) => () => void
 
 export type Listener<State> = (state: State) => void
 
-export type Subscribe<State> = (listener: Listener<State>) => void
+export type Subscribe<State> = (listener: Listener<State>) => () => void
 
 export type StateSetter<State> = (update: State | ((state: State) => State) | ((state: State) => Promise<State>)) => Promise<State>
 
