@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { create } from '../src/create'
+import { create } from '../src'
 
 test('Sets the value', async () => {
   const { useSelector } = create(0)
@@ -10,7 +10,7 @@ test('Sets the value', async () => {
   expect(result.current[0]).toBe(42)
 })
 
-test('Sets the new state based on the previous previous', async () => {
+test('Sets the new state based on the previous', async () => {
   const { useSelector } = create(5)
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
   act(() => {
@@ -24,18 +24,11 @@ test('Works with asynchronous actions', async () => {
   const { useSelector } = create(5)
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
-  const getRandomRemoteNumber = (): Promise<number> => {
-    return new Promise((res)=>{
-      setTimeout(() => {
-        res(1000)
-      }, 100)
-    })
-  } 
+  const getNextState = () => Promise.resolve(1000)
 
   act(() => {
     result.current[1](async () => {
-      const numberFromRemote = await getRandomRemoteNumber()
-      return numberFromRemote
+      return await getNextState()
     })
   })
 
@@ -43,3 +36,23 @@ test('Works with asynchronous actions', async () => {
 
   expect(result.current[0]).toBe(1000)
 })
+
+test('Subscribes to the store changes', async () => {
+  const { useSelector, subscribe } = create(5)
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+
+  const mockSubscriber = jest.fn()
+
+  subscribe(mockSubscriber)
+
+  act(() => {
+    result.current[1](state=> state + 10)
+  })
+
+  await waitForNextUpdate()
+
+  expect(mockSubscriber).toBeCalledWith(15)
+})
+
+
+//TODO: add tests for plugins
