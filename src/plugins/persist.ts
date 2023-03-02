@@ -1,5 +1,6 @@
 import type { Plugin } from '../types'
 
+//TODO: handle primitive stores
 export const persist: Plugin = (name: string) => (store) => {
   if (typeof window === 'undefined') return
   store.subscribeExternal((state) => {

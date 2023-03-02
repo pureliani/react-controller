@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { create } from '../src'
+import { create, persist } from '../src'
 
 test('Sets the value', async () => {
   const { useSelector } = create(0)
@@ -54,5 +54,16 @@ test('Subscribes to the store changes', async () => {
   expect(mockSubscriber).toBeCalledWith(15)
 })
 
+test('Persists a primitive store via \'persist\' plugin', async () => {
+  const { useSelector } = create(0, [persist('counter')])
+  const { result } = renderHook(() => useSelector())
 
-//TODO: add tests for plugins
+  act(() => {
+    result.current[1](42)
+  })
+
+  expect(Number(localStorage.counter)).toBe(42)
+})
+
+
+//TODO: add a test for brooadcast plugin
