@@ -39,14 +39,10 @@ export const createStoreAPI = <State>(store: State): StoreAPI<State> => {
     }
   }
 
-  const setState: StateSetter<State> = (update) => {
-    if (update instanceof Function) {
-      Promise.resolve(update(state)).then(value => {
-        state = value
-      })
-    } else {
-      state = update
-    }
+  const setState: StateSetter<State> = async (update) => {
+    const newValue = await (update instanceof Function ? Promise.resolve(update(state)) : Promise.resolve(update))
+    state = newValue
+    return newValue
   }
 
   return {

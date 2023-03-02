@@ -24,9 +24,10 @@ export const create: CreateStore = (initialState, plugins) => {
       } 
     }
     
-    const setStateWrapper: typeof storeAPI.setState = (update) => {
-      storeAPI.setState(update)
+    const setStateWrapper: typeof storeAPI.setState = async (update) => {
+      const updatedState = await storeAPI.setState(update)
       storeAPI.notify(['internal', 'external', 'channel'])
+      return updatedState
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,16 +40,11 @@ export const create: CreateStore = (initialState, plugins) => {
       const value = useSyncExternalStore(storeAPI.subscribeInternal, getSnapshot, getSnapshot)
       const path = useMemo(() => selectorToPath(key), [key])
 
-      const setValue: StateSetter<ReturnType<typeof key>> = useCallback((update) => {
-        if (update instanceof Function) {
-          Promise.resolve(update(value)).then(newValue => {
-            const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: newValue })
-            setStateWrapper(nextRootState)
-          })
-        } else {
-          const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: update })
-          setStateWrapper(nextRootState)
-        }
+      const setValue: StateSetter<ReturnType<typeof key>> = useCallback(async (update) => {
+        const newValue = await (update instanceof Function ? Promise.resolve(update(value)) : Promise.resolve(update))
+        const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: newValue })
+        await setStateWrapper(nextRootState)
+        return newValue
       }, [path, value])
 
       return [value, setValue]

@@ -3,10 +3,14 @@ import { create, persist } from '../src'
 
 test('Sets the value', async () => {
   const { useSelector } = create(0)
-  const { result } = renderHook(() => useSelector())
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+  
   act(() => {
     result.current[1](42)
   })
+
+  await waitForNextUpdate()
+
   expect(result.current[0]).toBe(42)
 })
 
@@ -56,13 +60,15 @@ test('Subscribes to the store changes', async () => {
 
 test('Persists a primitive store via \'persist\' plugin', async () => {
   const { useSelector } = create(0, [persist('counter')])
-  const { result } = renderHook(() => useSelector())
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   act(() => {
     result.current[1](42)
   })
 
-  expect(Number(localStorage.counter)).toBe(42)
+  await waitForNextUpdate()
+
+  expect(JSON.parse(localStorage.counter)).toBe(42)
 })
 
 

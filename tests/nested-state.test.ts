@@ -3,21 +3,28 @@ import { create } from '../src'
 
 test('Sets the nested value', async () => {
   const { useSelector } = create({ a: { b: [{ c: [4] }] } })
-  const { result } = renderHook(() => useSelector(state=>state.a.b[0].c[0]))
+  const { result, waitForNextUpdate } = renderHook(() => useSelector(state=>state.a.b[0].c[0]))
   const r = Math.random() * 100
+  
   act(() => {
     result.current[1](r)
   })
+  
+  await waitForNextUpdate()
+
   expect(result.current[0]).toBe(r)
 })
 
 test('Sets the nested value and doesn\'t change the types along the way', async () => {
   const { useSelector, getState } = create({ a: { b: [{ c: [4] }] } })
-  const { result } = renderHook(() => useSelector(state => state.a.b[0].c[0]))
+  const { result, waitForNextUpdate } = renderHook(() => useSelector(state => state.a.b[0].c[0]))
   const r = Math.random() * 100
   act(() => {
     result.current[1](r)
   })
+
+  await waitForNextUpdate()
+
   expect(result.current[0]).toBe(r)
 
   const currentState = getState()
