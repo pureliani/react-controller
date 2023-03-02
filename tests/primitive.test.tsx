@@ -1,46 +1,21 @@
-import React from 'react'
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react-hooks'
 import { create } from '../src/create'
 
-const { useSelector } = create(0)
-
-global.structuredClone = (v: unknown) => JSON.parse(JSON.stringify(v))
-
-const PrimitiveStoreTestComponent = () => {
-  const [count, setCount] = useSelector()
-  return <div>
-    <div data-testid='counter'>Count: {count}</div>
-    <button data-testid="+" onClick={() => setCount(current => current + 1)}>+ 1</button>
-    <button data-testid="-" onClick={() => setCount(current => current - 1)}>- 1</button>
-    <button data-testid="set:1000" onClick={() => setCount(1000)}>= 1000</button>
-  </div>
-}
-
-test('Changes count based on current count', async () => {
-  const { getByTestId } = render(<PrimitiveStoreTestComponent />)
-  const counter = getByTestId('counter')
-  const plus = getByTestId('+')
-  const minus = getByTestId('-')
-  await waitFor(() => {
-    fireEvent(plus, new Event('click', { bubbles: true }))
-    fireEvent(plus, new Event('click', { bubbles: true }))
-    fireEvent(plus, new Event('click', { bubbles: true }))
-    expect(counter.innerHTML).toBe('Count: 3')
-    fireEvent(minus, new Event('click', { bubbles: true }))
-    fireEvent(minus, new Event('click', { bubbles: true }))
-    fireEvent(minus, new Event('click', { bubbles: true }))
-    fireEvent(minus, new Event('click', { bubbles: true }))
-    fireEvent(minus, new Event('click', { bubbles: true }))
-    expect(counter.innerHTML).toBe('Count: -2')
+test('Sets the value', async () => {
+  const { useSelector } = create(0)
+  const { result } = renderHook(() => useSelector())
+  act(() => {
+    result.current[1](42)
   })
+  expect(result.current[0]).toBe(42)
 })
 
-test('Sets the count to a specific number', async () => {
-  const { getByTestId } = render(<PrimitiveStoreTestComponent />)
-  const counter = getByTestId('counter')
-  const equalsThousand = getByTestId('set:1000')
-  await waitFor(() => {
-    fireEvent(equalsThousand, new Event('click', { bubbles: true }))
-    expect(counter.innerHTML).toBe('Count: 1000')
+test('Sets the state based on previous value', async () => {
+  const { useSelector } = create(5)
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+  act(() => {
+    result.current[1](state => state + 13)
   })
+  await waitForNextUpdate()
+  expect(result.current[0]).toBe(18)
 })
