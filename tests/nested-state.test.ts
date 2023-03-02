@@ -47,7 +47,6 @@ test('Sets the nested value and doesn\'t change the types along the way', async 
   expect(typeof currentState.a.b[0].c[0]).toBe('number')
 })
 
-//TODO: Do not change the test. fix the bug in the code to make this test pass
 test('Sets the root state asynchronously', async () => {
   const { useSelector, setState } = create({ a: { b: 5 } })
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
@@ -67,6 +66,21 @@ test('Sets the root state asynchronously', async () => {
   await waitForNextUpdate()
 
   expect(result.current[0].a.b).toBe(144)
+})
+
+test('Callback initializes nested state', async () => {
+  const { useSelector, setState } = create(() => {
+    return { a: { b: -4 } }
+  })
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+
+  act(() => {
+    setState(() => ({a: { b: 17 }}))
+  })
+
+  await waitForNextUpdate()
+
+  expect(result.current[0].a.b).toBe(17)
 })
 
 

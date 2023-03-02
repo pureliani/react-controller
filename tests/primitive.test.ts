@@ -80,5 +80,19 @@ test('Persists a primitive store via \'persist\' plugin', async () => {
   expect(JSON.parse(localStorage.counter)).toBe(42)
 })
 
+test('Callback initializes primitive state', async () => {
+  const { useSelector, setState } = create(() => {
+    return "hello"
+  })
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+
+  act(() => {
+    setState(() => "world")
+  })
+
+  await waitForNextUpdate()
+
+  expect(result.current[0]).toBe("world")
+})
 
 //TODO: add a test for brooadcast plugin

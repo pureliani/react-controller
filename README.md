@@ -15,6 +15,7 @@ A small, fast and no-boilerplate state-management library for react, using hooks
    - [Primitive store](#primitive-store)  
    - [Complex store](#complex-store)  
    - [Asynchronous actions](#asynchronous-actions)
+   - [Initializing state with a callback](#initializing-state-with-a-callback)
    - [Getting the state from outside of react](#getting-the-state-from-outside-of-react)  
    - [Setting the state from outside of react](#setting-the-state-from-outside-of-react)  
    - [Subscribing to changes](#subscribing-to-changes)  
@@ -145,6 +146,28 @@ function App() {
 
 export default App
 ```
+
+### Initializing state with a callback
+
+```tsx
+import { create } from "@gapu/react-controller"
+
+const { useSelector } = create(() => {
+  return { a: { b: { c: 5 } } }
+})
+
+export default function App() {
+  const [count, setCount] = useSelector(state => state.a.b.c)
+  return (
+    <div>
+      <div>Count is: {count}</div>
+      <button onClick={() => {setCount(current => current + 1)}}>+ 1</button>
+      <button onClick={() => {setCount(current => current - 1)}}>- 1</button>
+    </div>
+  )
+}
+```
+
 
 ### Getting the state from outside of react
 
@@ -410,6 +433,3 @@ function App() {
 
 export default App
 ```
-
-## Planned features  
-1. Callback state initialization  

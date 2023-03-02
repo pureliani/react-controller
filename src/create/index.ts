@@ -3,12 +3,12 @@ import { useSyncExternalStore } from 'use-sync-external-store/shim'
 import { createStoreAPI } from '../helpers/createStoreAPI'
 import { selectorToPath } from '../helpers/selectorToPath'
 import { setNestedValue } from '../helpers/setNestedValue'
-import type { CreateStore, StateSetter, UseSelector } from '../types'
+import type { CreateStore, InferStateFromInitializer, StateSetter, UseSelector } from '../types'
 
-export const create: CreateStore = (initialState, plugins) => {
-    type State = typeof initialState
+export const create: CreateStore = (stateInitializer, plugins) => {
+    type State = InferStateFromInitializer<typeof stateInitializer>
 
-    const storeAPI = createStoreAPI(initialState)
+    const storeAPI = createStoreAPI(stateInitializer)
 
     plugins?.forEach(p => {
       p(storeAPI)

@@ -43,4 +43,10 @@ export type Store<State> = {
   useSelector: UseSelector<State>
 }
 
-export type CreateStore = <State>(initialState: State, plugins?: ReturnType<Plugin>[]) => Store<State>
+export type StateInitializer<State> = State | (() => State)
+
+export type InferStateFromInitializer<Initializer> = Initializer extends () => any ? ReturnType<Initializer> : Initializer
+
+export type CreateStore = <State>(initialState: StateInitializer<State>, plugins?: ReturnType<Plugin>[]) => Store<State>
+
+export type CreateStoreAPI = <State>(initialState: StateInitializer<State>, plugins?: ReturnType<Plugin>[]) => StoreAPI<State>
