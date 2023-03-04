@@ -1,5 +1,3 @@
-export type TObject = { [key: string | symbol | number]: unknown }
-
 export type Path = (string | symbol | number)[]
 
 export type InternalListener = () => void
@@ -13,8 +11,6 @@ export type Listener<State> = (state: State) => void
 export type Subscribe<State> = (listener: Listener<State>) => () => void
 
 export type StateSetter<State> = (update: State | ((state: State) => State) | ((state: State) => Promise<State>)) => Promise<State>
-
-export type StoreAPIStateSetter<State> = (update: State) => void
 
 export type StateGetter<State> = () => State
 
@@ -45,6 +41,7 @@ export type Store<State> = {
 
 export type StateInitializer<State> = State | (() => State)
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type InferStateFromInitializer<Initializer> = Initializer extends () => any ? ReturnType<Initializer> : Initializer
 
 export type CreateStore = <State>(initialState: StateInitializer<State>, plugins?: ReturnType<Plugin>[]) => Store<State>

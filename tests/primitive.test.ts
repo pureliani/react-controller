@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { create, persist } from '../src'
+import { broadcast, create, persist } from '../src'
 
 test('Sets the value', async () => {
   const { useSelector } = create(0)
@@ -14,7 +14,7 @@ test('Sets the value', async () => {
   expect(result.current[0]).toBe(42)
 })
 
-test('Sets the new state based on the previous', async () => {
+test('Updates state based on the previous', async () => {
   const { useSelector } = create(5)
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
   act(() => {
@@ -41,7 +41,7 @@ test('Works with asynchronous actions', async () => {
   expect(result.current[0]).toBe(1000)
 })
 
-test('Subscribes and unsubscribes to the store changes', async () => {
+test('Subscribes and unsubscribes to the state changes', async () => {
   const { useSelector, subscribe } = create(5)
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
@@ -67,7 +67,7 @@ test('Subscribes and unsubscribes to the store changes', async () => {
   expect(mockSubscriber).toBeCalledTimes(1)
 })
 
-test('Persists a primitive store via \'persist\' plugin', async () => {
+test('Persists a primitive state via \'persist\' plugin', async () => {
   const { useSelector } = create(0, [persist('counter')])
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
@@ -82,17 +82,33 @@ test('Persists a primitive store via \'persist\' plugin', async () => {
 
 test('Callback initializes primitive state', async () => {
   const { useSelector, setState } = create(() => {
-    return "hello"
+    return 'hello'
   })
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   act(() => {
-    setState(() => "world")
+    setState(() => 'world')
   })
 
   await waitForNextUpdate()
 
-  expect(result.current[0]).toBe("world")
+  expect(result.current[0]).toBe('world')
 })
 
-//TODO: add a test for brooadcast plugin
+//TODO: fix the error 'BroadcastChannel is undefined'
+test('Primitive state emits changes on a broadcast channel', async () => {
+  const { useSelector } = create(1, [broadcast('counter-channel')])
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+  
+  const bc = new BroadcastChannel('counter-channel')
+  const mockBcListener = jest.fn()
+  bc.onmessage = mockBcListener
+  
+  act(() => {
+    result.current[1](1000)
+  })
+  
+  await waitForNextUpdate()
+  
+  expect(mockBcListener).toBeCalledWith(1000)
+})

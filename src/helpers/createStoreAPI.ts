@@ -1,4 +1,4 @@
-import type { CreateStoreAPI, InferStateFromInitializer, InternalListener, Listener, ListenerType, StateSetter, StoreAPI, Subscribe, SubscribeInternal } from '../types'
+import type { CreateStoreAPI, InferStateFromInitializer, InternalListener, Listener, ListenerType, StateSetter, Subscribe, SubscribeInternal } from '../types'
 
 export const createStoreAPI: CreateStoreAPI = (stateInitializer) => {
   let state = stateInitializer instanceof Function ? stateInitializer() : stateInitializer
