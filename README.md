@@ -12,8 +12,8 @@ A small, fast and no-boilerplate state-management library for react, using hooks
 1. [Installation](#installation-)  
 2. [Description](#description)  
 3. [Usage](#usage)  
-   - [Primitive store](#primitive-store)  
-   - [Complex store](#complex-store)  
+   - [Primitive state](#primitive-state)  
+   - [Nested state](#nested-state)  
    - [Asynchronous actions](#asynchronous-actions)
    - [Initializing state with a callback](#initializing-state-with-a-callback)
    - [Getting the state from outside of react](#getting-the-state-from-outside-of-react)  
@@ -53,7 +53,7 @@ react-controller is a state-management library which is aimed at making nested s
 > **Note**  
 > **Context providers are not needed.**
 
-### Primitive store
+### Primitive state
 
 ```tsx
 import { create } from '@gapu/react-controller'
@@ -78,7 +78,7 @@ export const Counter = () => {
 }
 ```
 
-### Complex store
+### Nested state
 
 When working with a nested state, unlike other state management libraries, you are only concerned with the field that you are accessing.  
 
