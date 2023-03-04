@@ -25,7 +25,6 @@ A small, fast and no-boilerplate state-management library for react, using hooks
    - [Sharing state between browser tabs with the 'broadcast' plugin](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
    - [Using both persist and broadcast in conjunction](#sharing-state-between-browser-tabs-with-the-broadcast-plugin)
    - [Custom plugins](#custom-plugins)
-5. [Planned Features](#planned-features)
 
 ## Installation ⚡
 
@@ -41,8 +40,6 @@ react-controller is a state-management library which is aimed at making nested s
 
 > **Note**  
 > **This library is still in development**
->  
-> Version 1.0.0 will be released only after the planned features are implemented and the remaining bugs are fixed. 
 >  
 > Collaborators are welcome ❤  
 >
