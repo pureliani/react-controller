@@ -6,8 +6,8 @@ export const broadcast: Plugin = (name: string) => (store) => {
   store.subscribeChannel((state) => {
     channel.postMessage(state)
   })
-  channel.onmessage = (e: MessageEvent<ReturnType<typeof store.getState>>) => {
-    store.setState(e.data)
+  channel.onmessage = async (e: MessageEvent<ReturnType<typeof store.getState>>) => {
+    await store.setState(e.data)
     store.notify(['internal', 'external'])
   }
 }
