@@ -168,18 +168,18 @@ test('Callback initializes nested state', async () => {
   since it's on the path to 'state.a.b', we also don't want to rerender anything
   which is on the different path (has a different selector).
 
-  e.g: let's say we want to replace 'state.a.b.c'
+  e.g: let's say we want to update 'state.a.b.c'
   to achieve the results we spoke about, we need to replace references to:
-    state
-    state.a
-    state.a.b
-    state.a.b.c
+  state
+  state.a
+  state.a.b
+  state.a.b.c
 
   replacing references for each level will ensure that rerender will be triggered only for
   the components which are using one of the above listed selectors.
 
-  references to: state.z or state.a.y or state.a.b.t will not be replaced, therefore
-  components which are using these references will not be rerendered.
+  references to: state.z or state.a.y or state.a.b.t or some other objects will not be replaced, therefore
+  components which are using these other selectors will not be rerendered.
 */
 test('Replaces only the references which are on the path to the selected value', async () => {
   const initialState = { a: { b: { c: [{ d: 1 }] } }, e: { f: { g: [{ h: 2 }] } } }
