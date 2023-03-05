@@ -1,4 +1,6 @@
+import { replaceReference } from './replaceReference'
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 type SetNestedValueArgs<State> = {
   state: State
   path: (string | symbol | number)[]
@@ -6,12 +8,6 @@ type SetNestedValueArgs<State> = {
 }
 
 type SetNestedValue = <State>(args: SetNestedValueArgs<State>) => State
-
-const replaceReference = <S>(state: S): S => {
-  if (typeof state !== 'object') return state
-  if(Array.isArray(state)) return Object.assign([], state)
-  else return Object.assign({}, state)
-}
 
 export const setNestedValue: SetNestedValue = ({ state, path, value }) => {
   if(path.length === 0) return value

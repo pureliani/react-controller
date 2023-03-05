@@ -5,7 +5,7 @@ type Tracker<State> = (store: State) => unknown
 export const selectorToPath = (tracker: Tracker<Record<string | number | symbol, never>>): Path => {
   const path: Path = []
   const handler: ProxyHandler<Record<string | number | symbol, never>> = {
-    get(t, p) {
+    get(_, p) {
       path.push(p)
       return new Proxy({}, handler)
     }

@@ -41,9 +41,6 @@ export type Store<State> = {
 
 export type StateInitializer<State> = State | (() => State)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type InferStateFromInitializer<Initializer> = Initializer extends () => any ? ReturnType<Initializer> : Initializer
-
 export type CreateStore = <State>(initialState: StateInitializer<State>, plugins?: ReturnType<Plugin>[]) => Store<State>
 
 export type CreateStoreAPI = <State>(initialState: StateInitializer<State>, plugins?: ReturnType<Plugin>[]) => StoreAPI<State>

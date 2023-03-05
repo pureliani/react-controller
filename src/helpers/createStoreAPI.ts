@@ -1,8 +1,8 @@
-import type { CreateStoreAPI, InferStateFromInitializer, InternalListener, Listener, ListenerType, StateSetter, Subscribe, SubscribeInternal } from '../types'
+import type { CreateStoreAPI, InternalListener, Listener, ListenerType, StateSetter, Subscribe, SubscribeInternal } from '../types'
 
 export const createStoreAPI: CreateStoreAPI = (stateInitializer) => {
   let state = stateInitializer instanceof Function ? stateInitializer() : stateInitializer
-  type State = InferStateFromInitializer<typeof stateInitializer>
+  type State = typeof state
   
   const getState = () => state
   const internalListeners = new Set<InternalListener>()
