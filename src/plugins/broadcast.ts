@@ -18,11 +18,9 @@ export const broadcast: Plugin = (name: string) => (store) => {
 
   channel.onmessage = async (e: MessageEvent<M<S>>) => {
     if(e.data.type === 'GET') {
-      console.log('Received GET request')
       channel.postMessage({ state: store.getState(), type: 'SET' } as M<S>)
     }
     if(e.data.type === 'SET') {
-      console.log('Received SET request')
       await store.setState(e.data.state)
       store.notify(['internal', 'external'])
     }
