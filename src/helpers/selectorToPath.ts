@@ -1,16 +1,18 @@
 import type { Path } from '../types'
 
-type Tracker<State> = (store: State) => unknown
+type Selector<State> = (store: State) => unknown
 
-export const selectorToPath = (tracker: Tracker<Record<string | number | symbol, never>>): Path => {
+type DummyObject = Record<string | number | symbol, never>
+
+export const selectorToPath = (selector: Selector<DummyObject>): Path => {
   const path: Path = []
-  const handler: ProxyHandler<Record<string | number | symbol, never>> = {
+  const handler: ProxyHandler<DummyObject> = {
     get(_, p) {
       path.push(p)
       return new Proxy({}, handler)
     }
   }
-  const trackerProxy = new Proxy({}, handler)
-  tracker(trackerProxy)
+  const selectorTracker = new Proxy({}, handler)
+  selector(selectorTracker)
   return path
 }
