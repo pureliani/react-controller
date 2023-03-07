@@ -1,20 +1,22 @@
 import { useCallback, useMemo } from 'react'
-import { useSyncExternalStore } from 'use-sync-external-store/shim'
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 import { selectorToPath } from '../helpers/selectorToPath'
 import { setNestedValue } from '../helpers/setNestedValue'
 import type { StateSetter, StoreAPI, UseSelector } from '../types'
 
 export const createUseSelector = <State>(storeAPI: StoreAPI<State>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (function useSelector (key = state => state as any) {
-    const getSnapshot = useCallback(() => {
-      return key(storeAPI.getState())
-    }, [key])
-       
-    const value = useSyncExternalStore(storeAPI.subscribeInternal, getSnapshot, getSnapshot)
-    const path = useMemo(() => selectorToPath(key), [key])
+  return (function useSelector (selector = state => state as any) {
+    const value = useSyncExternalStoreWithSelector(
+      storeAPI.subscribeInternal, 
+      storeAPI.getState, 
+      storeAPI.getState, 
+      selector)
+      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const path = useMemo(() => selectorToPath(selector), [])
   
-    const setValue: StateSetter<ReturnType<typeof key>> = useCallback(async (update) => {
+    const setValue: StateSetter<ReturnType<typeof selector>> = useCallback(async (update) => {
       const newValue = await (update instanceof Function ? Promise.resolve(update(value)) : Promise.resolve(update))
       const nextRootState = setNestedValue<State>({ state: storeAPI.getState(), path, value: newValue })
       await storeAPI.setState(nextRootState)

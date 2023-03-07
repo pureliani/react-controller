@@ -32,12 +32,10 @@ export type initServerStateFunction<State> = (state: State) => void
 export type UseSelector<State> = <TSelected = State>(key?: (state: State) => TSelected) => [TSelected, StateSetter<TSelected>]
 
 export type Store<State> = {
-  getState: StoreAPI<State>['getState']
-  setState: StoreAPI<State>['setState']
-  subscribe: StoreAPI<State>['subscribeExternal']
+  subscribe: Subscribe<State>
   initServerState: initServerStateFunction<State>
   useSelector: UseSelector<State>
-}
+} & Pick<StoreAPI<State>, 'getState' | 'setState'>
 
 export type StateInitializer<State> = State | (() => State)
 
