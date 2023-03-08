@@ -21,7 +21,7 @@ export const broadcast: Plugin = (name: string) => (store) => {
       channel.postMessage({ state: store.getState(), type: 'SET' } as M<S>)
     }
     if(e.data.type === 'SET') {
-      await store.setState(e.data.state)
+      await store.stateSetter()(e.data.state)
       store.notify(['internal', 'external'])
     }
   }

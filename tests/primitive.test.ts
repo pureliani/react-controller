@@ -81,13 +81,13 @@ test('Persists a primitive state via \'persist\' plugin', async () => {
 })
 
 test('Callback initializes primitive state', async () => {
-  const { useSelector, setState } = create(() => {
+  const { useSelector, stateSetter } = create(() => {
     return 'hello'
   })
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   act(() => {
-    setState(() => 'world')
+    stateSetter()(() => 'world')
   })
 
   await waitForNextUpdate()

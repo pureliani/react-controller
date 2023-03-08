@@ -111,7 +111,7 @@ test('Sets the nested value and doesn\'t change the types along the way', async 
 })
 
 test('Sets the root state asynchronously', async () => {
-  const { useSelector, setState } = create({ a: { b: 5 } })
+  const { useSelector, stateSetter } = create({ a: { b: 5 } })
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   const getNextState = () => Promise.resolve({ 
@@ -121,7 +121,7 @@ test('Sets the root state asynchronously', async () => {
   })
 
   act(() => {
-    setState(async () => {
+    stateSetter()(async () => {
       return await getNextState()
     })
   })
@@ -147,13 +147,13 @@ test('Persists a nested state via \'persist\' plugin', async () => {
 })
 
 test('Callback initializes nested state', async () => {
-  const { useSelector, setState } = create(() => {
+  const { useSelector, stateSetter } = create(() => {
     return { a: { b: -4 } }
   })
   const { result, waitForNextUpdate } = renderHook(() => useSelector())
 
   act(() => {
-    setState(() => ({a: { b: 17 }}))
+    stateSetter()(() => ({a: { b: 17, d:4 }}))
   })
 
   await waitForNextUpdate()

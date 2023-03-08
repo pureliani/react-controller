@@ -1,4 +1,7 @@
-import type { CreateStoreAPI, InternalListener, Listener, ListenerType, StateSetter, Subscribe, SubscribeInternal } from '../types'
+import type { CreateStoreAPI, InternalListener, Listener, ListenerType, NestedStateSetter, Subscribe, SubscribeInternal } from '../types'
+import { selectorToPath } from './selectorToPath'
+import { setNestedValue } from './setNestedValue'
+
 
 export const createStoreAPI: CreateStoreAPI = (stateInitializer) => {
   let state = stateInitializer instanceof Function ? stateInitializer() : stateInitializer
@@ -8,6 +11,7 @@ export const createStoreAPI: CreateStoreAPI = (stateInitializer) => {
   const internalListeners = new Set<InternalListener>()
   const externalListeners = new Set<Listener<State>>()
   const channelListeners = new Set<Listener<State>>()
+
   const subscribeInternal: SubscribeInternal = (listener: InternalListener) => {
     internalListeners.add(listener)
     return () => {
@@ -41,14 +45,18 @@ export const createStoreAPI: CreateStoreAPI = (stateInitializer) => {
     }
   }
 
-  const setState: StateSetter<State> = async (update) => {
-    const newValue = await (update instanceof Function ? Promise.resolve(update(state)) : Promise.resolve(update))
-    state = newValue
-    return newValue
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const stateSetter: NestedStateSetter<State> = (selector = state => state as any) => async (update) => {
+    const path = selectorToPath(selector)
+    const oldValue = selector(getState())
+    const value = await (update instanceof Function ? Promise.resolve(update(oldValue)) : Promise.resolve(update))
+    const nextRootState = setNestedValue({ state, path, value })
+    state = nextRootState
+    return value
+  } 
 
   return {
-    setState,
+    stateSetter,
     getState,
     notify,
     subscribeInternal,

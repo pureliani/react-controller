@@ -196,22 +196,19 @@ export const Counter = () => {
 ```tsx
 import { create } from '@gapu/react-controller'
 
-const { setState, getState, useSelector } = create({ count: 1 })
+const { stateSetter, getState } = create({ count: 1 })
 
-// you can also set the current state of your store 
-// by calling the 'setState' function.
-setState({ count: 42 })
-console.log(getState()) // { count: 42 }
+// signature: stateSetter(<selector>)(<update>)
+// type of <selector>: undefined | <Selected>(state: Store) => Selected
+// type of <update>: Selected | () => Selected | () => Promise<Selected>
+// e.g: stateSetter()({ count: 10 })
+// note: use more specific selectors as much as possible to avoid re-calculating whole store
+stateSetter(state => state.count)(async () => { return 42 })
 
-export const Counter = () => {
-    const [value, setValue] = useSelector(state => state.count)
-    return (
-        <div>
-            <h3>Count {value}</h3>
-            <button onClick={() => setValue(current => current + 1)}>+ 1</button>
-            <button onClick={() => setValue(current => current - 1)}>- 1</button>
-        </div>
-    )
+export default function App() {
+  return (
+    <div>Count: {getState().count}</div> // <div>Count: 42</div>
+  )
 }
 ```
 
@@ -377,11 +374,11 @@ const myLoggerPlugin: Plugin = (name) => (storeAPI) => {
     //Get the root state of the store
     getState, 
     
-    // Set the root state of the store
+    // state setter with a support of selectors
     // This will not cause a rerender, if you want to do that, call the
     // 'notify' function with 'internal' as an argument right after setting the
     // state, e.g: notify(['internal'])
-    setState,
+    stateSetter,
 
     // notify(['internal']) - rerender components which are using the 
     // 'useSelector' hook, (rerender will only happen if the returned value from 

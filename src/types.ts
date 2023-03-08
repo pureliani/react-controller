@@ -12,13 +12,21 @@ export type Subscribe<State> = (listener: Listener<State>) => () => void
 
 export type StateSetter<State> = (update: State | ((state: State) => State) | ((state: State) => Promise<State>)) => Promise<State>
 
+export type NestedStateSetter<State> = 
+<Selected = State>(selector?: (store: State) => Selected) 
+=> (update: 
+  | ((current: Selected) => Promise<Selected>) 
+  | ((current: Selected) => Selected) 
+  | Selected) 
+=> Promise<Selected>
+
 export type StateGetter<State> = () => State
 
 export type Notifier = (types: ListenerType[]) => void
 
 export type StoreAPI<State> = {
   getState: StateGetter<State>
-  setState: StateSetter<State>
+  stateSetter: NestedStateSetter<State>
   notify: Notifier
   subscribeInternal: SubscribeInternal
   subscribeExternal: Subscribe<State>
@@ -35,7 +43,7 @@ export type Store<State> = {
   subscribe: Subscribe<State>
   initServerState: initServerStateFunction<State>
   useSelector: UseSelector<State>
-} & Pick<StoreAPI<State>, 'getState' | 'setState'>
+} & Pick<StoreAPI<State>, 'getState' | 'stateSetter'>
 
 export type StateInitializer<State> = State | (() => State)
 

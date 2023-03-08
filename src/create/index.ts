@@ -1,5 +1,5 @@
 import { createServerStateInitializer } from '../helpers/createServerStateInitializer'
-import { createSetStateAndNotify } from '../helpers/createSetStateAndNotify'
+import { createStateSetterWithNotify } from '../helpers/createStateSetterWithNotify'
 import { createStoreAPI } from '../helpers/createStoreAPI'
 import { createUseSelector } from '../helpers/createUseSelector'
 import type { CreateStore } from '../types'
@@ -12,12 +12,12 @@ export const create: CreateStore = (stateInitializer, plugins) => {
   })
 
   const initServerState = createServerStateInitializer(storeAPI)
-  const setStateAndNotify = createSetStateAndNotify(storeAPI)
+  const stateSetterWithNotify = createStateSetterWithNotify(storeAPI)
   const useSelector = createUseSelector(storeAPI)
 
   return {
     getState: storeAPI.getState,
-    setState: setStateAndNotify,
+    stateSetter: stateSetterWithNotify,
     subscribe: storeAPI.subscribeExternal,
     initServerState,
     useSelector

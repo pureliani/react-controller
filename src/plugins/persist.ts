@@ -8,7 +8,7 @@ export const persist: Plugin = (name: string) => (store) => {
   window.addEventListener('load', async () => {
     const oldState = localStorage.getItem(name)
     if (!oldState) return
-    await store.setState(JSON.parse(oldState))
+    await store.stateSetter()(JSON.parse(oldState))
     store.notify(['internal', 'external', 'channel'])
   })
 }
