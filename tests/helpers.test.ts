@@ -5,32 +5,41 @@ describe('replaceReference', () => {
   test('Replaces reference for objects', () => {
     const initial = {}
     const replaced = replaceReference(initial)
-    expect(initial).not.toBe(replaced)
+    expect(replaced).not.toBe(initial)
+    expect(replaced).toStrictEqual(initial)
   })
   test('Replaces reference for arrays', () => {
     const initial = []
     const replaced = replaceReference(initial)
-    expect(initial).not.toBe(replaced)
+    expect(replaced).not.toBe(initial)
+    expect(replaced).toStrictEqual(initial)
   })
   test('Replaces reference for Maps', () => {
     const initial = new Map()
     const replaced = replaceReference(initial)
-    expect(initial).not.toBe(replaced)
+    expect(replaced).not.toBe(initial)
+    expect(replaced).toStrictEqual(initial)
+    expect(replaced instanceof Map).toBe(true)
   })
   test('Replaces reference for Sets', () => {
-    const initial = new Map()
+    const initial = new Set()
     const replaced = replaceReference(initial)
-    expect(initial).not.toBe(replaced)
+    expect(replaced).not.toBe(initial)
+    expect(replaced).toStrictEqual(initial)
+    expect(replaced instanceof Set).toBe(true)
   })
   test('Replaces reference for Dates', () => {
-    const initial = new Map()
+    const initial = new Date()
     const replaced = replaceReference(initial)
-    expect(initial).not.toBe(replaced)
+    expect(replaced).not.toBe(initial)
+    expect(replaced).toStrictEqual(initial)
+    expect(replaced instanceof Date).toBe(true)
   })
   test('Returns original if typeof initial != \'object\'', () => {
     const initial = function(){ return }
     const replaced = replaceReference(initial)
     expect(initial).toBe(replaced)
+    expect(replaced).toStrictEqual(initial)
   })
 })
 
