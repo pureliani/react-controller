@@ -2,7 +2,8 @@ import type { Path } from '../types'
 
 type Selector<State> = (store: State) => unknown
 
-type DummyObject = Record<string | number | symbol, never>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DummyObject = Record<string | number | symbol, any>
 
 export const selectorToPath = (selector: Selector<DummyObject>): Path => {
   const path: Path = []
