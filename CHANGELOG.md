@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/pureliani/react-controller/compare/v2.0.1...v2.0.2) (2023-03-09)
+
+
+### Bug Fixes
+
+* stateSetter example ([45574fd](https://github.com/pureliani/react-controller/commit/45574fdc1af085c1a6803f7f6e73225623ef132c))
+* test cases ([33b54fd](https://github.com/pureliani/react-controller/commit/33b54fdf41d4a4ff493097cd350384c897787ddb))
+
 ### [2.0.1](https://github.com/pureliani/react-controller/compare/v2.0.0...v2.0.1) (2023-03-08)
 
 
