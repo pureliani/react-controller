@@ -202,8 +202,11 @@ const { stateSetter, getState } = create({ count: 1 })
 // type of <selector>: undefined | <Selected>(state: Store) => Selected
 // type of <update>: Selected | () => Selected | () => Promise<Selected>
 // e.g: stateSetter()({ count: 10 })
-// note: use more specific selectors as much as possible to avoid re-calculating whole store
-stateSetter(state => state.count)(async () => { return 42 })
+// Note: 
+// Using more specific selectors is recomendded to avoid unnecessary 
+// re-renders of the components which are unrelated to the selected state.
+const setCount = stateSetter(state => state.count)
+setCount(async () => { return 42 })
 
 export default function App() {
   return (
