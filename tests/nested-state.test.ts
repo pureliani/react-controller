@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { create, persist } from '../src'
+import { broadcast, create, persist } from '../src'
 
 test('Sets the nested value', async () => {
   const { useSelector } = create({ a: { b: [{ c: [4] }] } })
@@ -214,22 +214,22 @@ test('Replaces only the references which are on the path to the selected value',
 })
 
 //TODO: fix the error 'BroadcastChannel is undefined'
-// test('Nested state emits changes on a broadcast channel', async () => {
-//   const initialState = { a: { b: [{ c: [1_000_000] }] } }
-//   const { useSelector } = create(initialState, [broadcast('nested-channel')])
-//   const { result, waitForNextUpdate } = renderHook(() => useSelector())
-//   const nextState: typeof initialState = { a: { b: [{ c: [1] }] } }
+test('Nested state emits changes on a broadcast channel', async () => {
+  const initialState = { a: { b: [{ c: [1_000_000] }] } }
+  const { useSelector } = create(initialState, [broadcast('nested-channel')])
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
+  const nextState: typeof initialState = { a: { b: [{ c: [1] }] } }
   
-//   const bc = new BroadcastChannel('nested-channel')
-//   const mockBcListener = jest.fn()
-//   bc.onmessage = mockBcListener
+  const bc = new BroadcastChannel('nested-channel')
+  const mockBcListener = jest.fn()
+  bc.onmessage = mockBcListener
   
-//   act(() => {
-//     result.current[1](nextState)
-//   })
+  act(() => {
+    result.current[1](nextState)
+  })
   
-//   await waitForNextUpdate()
+  await waitForNextUpdate()
   
-//   expect(mockBcListener).toBeCalledTimes(1)
-// })
+  expect(mockBcListener).toBeCalled()
+})
 

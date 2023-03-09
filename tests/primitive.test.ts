@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import { create, persist } from '../src'
+import { broadcast, create, persist } from '../src'
 
 test('Sets the value', async () => {
   const { useSelector } = create(0)
@@ -96,19 +96,20 @@ test('Callback initializes primitive state', async () => {
 })
 
 //TODO: fix the error 'BroadcastChannel is undefined'
-// test('Primitive state emits changes on a broadcast channel', async () => {
-//   const { useSelector } = create(1, [broadcast('counter-channel')])
-//   const { result, waitForNextUpdate } = renderHook(() => useSelector())
+test('Primitive state emits changes on a broadcast channel', async () => {
+  const { useSelector, getState } = create(1, [broadcast('counter-channel')])
+  const { result, waitForNextUpdate } = renderHook(() => useSelector())
   
-//   const bc = new BroadcastChannel('counter-channel')
-//   const mockBcListener = jest.fn()
-//   bc.onmessage = mockBcListener
+  const bc = new BroadcastChannel('counter-channel')
+  const mockBcListener = jest.fn()
+  bc.onmessage = mockBcListener
   
-//   act(() => {
-//     result.current[1](1000)
-//   })
+  act(() => {
+    result.current[1](1000)
+  })
   
-//   await waitForNextUpdate()
-  
-//   expect(mockBcListener).toBeCalledWith(1000)
-// })
+  await waitForNextUpdate()
+
+  expect(mockBcListener).toBeCalledWith({data: {state: 1000, type: 'SET'}})
+
+})
