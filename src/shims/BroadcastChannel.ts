@@ -13,8 +13,11 @@ class BroadcastChannelShim {
   
   addEventListener(listener: Listener) {
     const listeners = BroadcastChannelShim.listeners.get(this.name)
-    if(typeof listeners === 'undefined') BroadcastChannelShim.listeners.set(this.name, new Set([listener]))
-    else listeners?.add(listener)
+    if(typeof listeners === 'undefined') {
+      BroadcastChannelShim.listeners.set(this.name, new Set([listener]))
+    } else {
+      listeners?.add(listener)
+    }
   }
   
   removeEventListener(listener: Listener) {
@@ -31,5 +34,5 @@ class BroadcastChannelShim {
   }
 }
 
-global.BroadcastChannel = BroadcastChannelShim as never
+globalThis.BroadcastChannel = BroadcastChannelShim as never
   
