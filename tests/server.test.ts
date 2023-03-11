@@ -10,8 +10,6 @@
 //   const initialState = { a: { b: 5 } }
 //   const { initServerState, getState } = create(initialState)
 //   const stateFromServer: typeof initialState = {a: { b: 100 }}
-//   act(() => {
-//     initServerState(stateFromServer)
-//   })
+//   initServerState(stateFromServer)
 //   expect(getState()).toStrictEqual(stateFromServer)
 // })
