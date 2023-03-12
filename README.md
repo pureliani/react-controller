@@ -129,8 +129,6 @@ function App() {
     <div>
       <div>Count: {count}</div>
       <button onClick={() => setCount(async () => {
-        // if an error gets thrown or a promise gets rejected, state will not
-        // get updated.
         const newNumber = await getRandomRemoteNumber()
 
         return newNumber
@@ -371,16 +369,17 @@ import { create, Plugin } from '@gapu/react-controller'
 
 // 'myLoggerPlugin' function will be invoked ONLY ONCE and 
 // as soon as the 'storeAPI' gets created.
-// you will need to pass a name to this plugin even if you dont need it.
+// P.S: you can also use ReturnType<Plugin> type instead, in case 
+// you don't need a name.
 const myLoggerPlugin: Plugin = (name) => (storeAPI) => {
   const {
     //Get the root state of the store
     getState, 
     
-    // state setter with a support of selectors
-    // This will not cause a rerender, if you want to do that, call the
-    // 'notify' function with 'internal' as an argument right after setting the
-    // state, e.g: notify(['internal'])
+    // same as 'stateSetter' returned from 'create', except that it doesn't
+    // trigger rerender of components, if you want to do that call 'notify'
+    // right after updating the state.
+    // state, e.g: stateSetter()({ count: 10 }); notify(['internal']);
     stateSetter,
 
     // notify(['internal']) - rerender components which are using the 
@@ -388,7 +387,7 @@ const myLoggerPlugin: Plugin = (name) => (storeAPI) => {
     // selector is different from the previous render as compared by Object.is )
     
     // notify(['channel']) - trigger the channel subscribers ( used by the
-    // broadcast plugin ). 
+    // broadcast plugin ). most likely you dont need this.
 
     // notify(['external']) - trigger subscribers
     // e.g: subscribe((newState) => {console.log(newState)})
